@@ -10,6 +10,8 @@ namespace Controller
     /// </summary>
     public class BaseSceneController : MonoBehaviour
     {
+        [field: SerializeField] public Camera MainCamera { get; private set; }
+        [field: SerializeField] public Light MainLight { get; private set; }
         [SerializeField] protected BaseSceneConfig config;
 
         public BaseSceneHandler SceneHandler { get; private set; }

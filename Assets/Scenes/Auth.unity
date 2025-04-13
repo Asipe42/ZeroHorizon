@@ -148,7 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e264ac08ae4af892e8c7d4f9375ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  <MainCamera>k__BackingField: {fileID: 1750210184}
+  <MainLight>k__BackingField: {fileID: 1003345469}
+  config: {fileID: 11400000, guid: 4e51e31c99c721540901967844ffcc82, type: 2}
 --- !u!4 &708201523
 Transform:
   m_ObjectHideFlags: 0

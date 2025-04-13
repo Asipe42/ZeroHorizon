@@ -284,7 +284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3788efb328474cdd96180a6690ea3977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  <MainCamera>k__BackingField: {fileID: 1335170092}
+  <MainLight>k__BackingField: {fileID: 628141034}
+  config: {fileID: 11400000, guid: 797c86695aaa1da4aa6dac183fbdb547, type: 2}
 --- !u!1 &1335170090
 GameObject:
   m_ObjectHideFlags: 0
