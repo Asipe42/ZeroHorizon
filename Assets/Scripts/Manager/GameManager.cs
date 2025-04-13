@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Controller;
-using Define;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility;
 
@@ -10,85 +6,32 @@ namespace Manager
     /// <summary>
     /// 프로그램 전반에 대한 제어 및 관리를 담당한다.
     /// </summary>
-    public class GameManager : MonoSingleton<GameManager>
+    public partial class GameManager : MonoSingleton<GameManager>
     {
-        public ClientEnum.ESceneType CurrentSceneType { get; private set; }
-        public BaseSceneController CurrentSceneController { get; private set; }
-
-        private Dictionary<ClientEnum.ESceneType, LoadSceneParameters> _sceneParameters = new()
-        {
-            { ClientEnum.ESceneType.Entry, new LoadSceneParameters(LoadSceneMode.Single) },
-            { ClientEnum.ESceneType.Auth, new LoadSceneParameters(LoadSceneMode.Single) },
-            { ClientEnum.ESceneType.Main, new LoadSceneParameters(LoadSceneMode.Single) },
-        };
+        public UIManager UI { get; private set; }
         
         protected override void Awake()
         {
             base.Awake();
             
+            Init();
+        }
+
+        private void Init()
+        {
+            InitEvent();
+            InitSubManager();
+        }
+
+        private void InitEvent()
+        {
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
-        
-        public void LoadScene(ClientEnum.ESceneType sceneType)
-        {
-            if (CurrentSceneType == sceneType)
-            {
-                Debug.Log("Already in the same scene.");
-            }
-            
-            CurrentSceneController?.CleanUp();
-            
-            AsyncOperation operation = SceneManager.LoadSceneAsync($"{sceneType}", _sceneParameters[sceneType]);
-            if (operation == null)
-            {
-                Debug.LogError($"Failed to load scene {sceneType}");
-                return;
-            }
 
-            operation.completed -= OnCompletedLoadScene;
-            operation.completed += OnCompletedLoadScene;
-        }
-        
-        private bool TryFindSceneController(Scene scene, out BaseSceneController controller)
+        private void InitSubManager()
         {
-            controller = null;
-            
-            GameObject[] goArray = scene.GetRootGameObjects();
-            foreach (var each in goArray)
-            {
-                if (each.gameObject.TryGetComponent(out controller))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void OnCompletedLoadScene(AsyncOperation operation)
-        {
-            Debug.Log("Scene loading completed.");
-        }
-        
-        private void OnSceneUnloaded(Scene scene)
-        {
-            Debug.Log("Scene unloaded: " + scene.name);
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            if (TryFindSceneController(scene, out var controller) == false)
-            {
-                Debug.LogError($"SceneController not found in {scene.name}");
-                return;
-            }
-
-            CurrentSceneController = controller;
-            CurrentSceneController.Init();
-            CurrentSceneType = CurrentSceneController.Type;
-            
-            Debug.Log("Scene loaded: " + CurrentSceneType);
+            UI = new UIManager();
         }
     }
 }
