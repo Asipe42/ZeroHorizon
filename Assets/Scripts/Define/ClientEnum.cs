@@ -9,5 +9,11 @@
             Auth = 2,
             Main = 3,
         }
+
+        public enum EUIType
+        {
+            None = 0,
+            Login = 1,
+        }
     }
 }
