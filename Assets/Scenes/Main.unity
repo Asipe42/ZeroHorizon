@@ -408,7 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MainCamera>k__BackingField: {fileID: 330585545}
   <MainLight>k__BackingField: {fileID: 410087040}
-  config: {fileID: 11400000, guid: 337b0f628cae37e4bbdede06f0d46159, type: 2}
+  <Config>k__BackingField: {fileID: 11400000, guid: 337b0f628cae37e4bbdede06f0d46159, type: 2}
 --- !u!4 &716503339
 Transform:
   m_ObjectHideFlags: 0

@@ -286,7 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MainCamera>k__BackingField: {fileID: 1335170092}
   <MainLight>k__BackingField: {fileID: 628141034}
-  config: {fileID: 11400000, guid: 797c86695aaa1da4aa6dac183fbdb547, type: 2}
+  <Config>k__BackingField: {fileID: 11400000, guid: 797c86695aaa1da4aa6dac183fbdb547, type: 2}
 --- !u!1 &1335170090
 GameObject:
   m_ObjectHideFlags: 0

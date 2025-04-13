@@ -3,23 +3,18 @@ using Manager;
 
 namespace Controller
 {
+    /// <summary>
+    /// 프로그램 진입점
+    /// </summary>
     public class EntrySceneController : BaseSceneController
     {
         public override ClientEnum.ESceneType Type => ClientEnum.ESceneType.Entry;
-
-        public override void Init()
+        
+        protected override void OnInit()
         {
-            base.Init();
-        }
-
-        public override void CleanUp()
-        {
-            base.CleanUp();
-        }
-
-        private void Start()
-        {
-            // 임시 코드
+            base.OnInit();
+            
+            // 초기화 이후 [Auth]로 이동한다.
             GameManager.Instance.LoadScene(ClientEnum.ESceneType.Auth);
         }
     }

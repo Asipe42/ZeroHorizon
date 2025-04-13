@@ -1,6 +1,5 @@
 ﻿using Config;
 using Define;
-using Handler;
 using UnityEngine;
 
 namespace Controller
@@ -12,17 +11,26 @@ namespace Controller
     {
         [field: SerializeField] public Camera MainCamera { get; private set; }
         [field: SerializeField] public Light MainLight { get; private set; }
-        [SerializeField] protected BaseSceneConfig config;
+        [field: SerializeField] public BaseSceneConfig Config { get; private set; }
 
-        public BaseSceneHandler SceneHandler { get; private set; }
         public virtual ClientEnum.ESceneType Type { get; protected set; }
         
         public virtual void Init()
         {
-            
+            OnInit();
         }
 
         public virtual void CleanUp()
+        {
+            OnCleanUp();
+        }
+
+        protected virtual void OnInit()
+        {
+            
+        }
+
+        protected virtual void OnCleanUp()
         {
             
         }
