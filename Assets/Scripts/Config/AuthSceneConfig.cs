@@ -2,7 +2,7 @@
 
 namespace Config
 {
-    [CreateAssetMenu(menuName = "SO/Config/AuthSceneConfig")]
+    [CreateAssetMenu(menuName = "SO/Config/Scene/AuthSceneConfig")]
     public class AuthSceneConfig : BaseSceneConfig
     {
         
