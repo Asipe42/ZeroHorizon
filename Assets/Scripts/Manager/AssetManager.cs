@@ -1,27 +1,52 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Object = UnityEngine.Object;
 
 namespace Manager
 {
     public class AssetManager
     {
-        public void LoadAsset<T>(string key, Action<T> onComplete = null) where T : Object
+        public void Init()
+        {
+            
+        }
+        
+        public async UniTask<T> LoadAsset<T>(string key) where T : UnityEngine.Object
         {
             AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key: key);
-            handle.Completed += (x) =>
+            
+            try
             {
-                if (x.Status != AsyncOperationStatus.Succeeded)
-                {
-                    Debug.LogWarning($"File {key} could not be loaded");
-                    return;
-                }
-                
+                T result = await handle.ToUniTask();
                 Debug.Log($"File {key} loaded");
-                onComplete?.Invoke(x.Result);
-            };
+                
+                return result;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"File {key} could not be loaded: {e.Message}");
+                return null;
+            }
+        }
+
+        public async UniTask<T> InstantiateAsset<T>(string key) where T : UnityEngine.Component
+        {
+            AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(key: key);
+
+            try
+            {
+                GameObject result = await handle.ToUniTask();
+                Debug.Log($"File {key} instantiated");
+                
+                return result.GetComponent<T>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"File {key} could not be instantiated");
+                return null;
+            }
         }
     }
 }

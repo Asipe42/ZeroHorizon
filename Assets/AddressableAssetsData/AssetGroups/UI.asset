@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: UI_Local
+  m_Name: UI
   m_EditorClassIdentifier: 
-  m_GroupName: UI_Local
+  m_GroupName: UI
   m_GUID: 291f51f97daf848498af07d3be39b249
   m_SerializeEntries:
   - m_GUID: 005e67aa04d5ed04ea7c5fabdc43064e

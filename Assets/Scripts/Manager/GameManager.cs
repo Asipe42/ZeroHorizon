@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility;
 
@@ -11,17 +13,24 @@ namespace Manager
         public UIManager UI { get; private set; }
         public AssetManager Assets { get; private set; }
         
+        public bool IsInit { get; private set; }
+        
         protected override void Awake()
         {
             base.Awake();
-            
-            Init();
+
+            Init().Forget();
         }
 
-        private void Init()
+        private async UniTaskVoid Init()
         {
+            IsInit = false;
+            
             InitEvent();
-            InitSubManager();
+            await InitAssetManager();
+            await InitUIManager();
+
+            IsInit = true;
         }
 
         private void InitEvent()
@@ -29,11 +38,23 @@ namespace Manager
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
+        
+        private async UniTask InitAssetManager()
+        {
+            Assets = new AssetManager();
+            Assets.Init();
 
-        private void InitSubManager()
+            await UniTask.Yield();
+            Debug.Log($"Complete {nameof(InitAssetManager)}");
+        }
+
+        private async UniTask InitUIManager()
         {
             UI = new UIManager();
-            Assets = new AssetManager();
+            await UI.Init();
+            
+            await UniTask.Yield();
+            Debug.Log($"Complete {nameof(InitUIManager)}");
         }
     }
 }

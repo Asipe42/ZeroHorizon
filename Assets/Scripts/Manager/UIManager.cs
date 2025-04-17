@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Config;
+using Cysharp.Threading.Tasks;
 using Define;
 using UI;
 using UnityEngine;
@@ -7,42 +9,75 @@ namespace Manager
 {
     public class UIManager
     {
-        private Dictionary<ClientEnum.EUIType, UIBinding> _uiBindings = new();
+        private readonly Dictionary<ClientEnum.EUIType, BaseUI> _cacheUIs = new();
+        private readonly Dictionary<ClientEnum.EUIType, BaseUIModel> _cacheUIModels = new();
+        private UIConfig _config;
         
-        public void OpenUI(ClientEnum.EUIType uiType)
+        public async UniTask Init()
         {
-            if (TryFindModel(uiType, out var model) == false)
+            /*
+             * 초기화 과정
+             *  1. Config 로드
+             *  2. BaseUI 로드 및 초기화
+             */
+            
+            // No.1
+            _config = await GameManager.Instance.Assets.LoadAsset<UIConfig>(key: nameof(UIConfig));
+            
+            // No.2
+            foreach (var kvp in _config.AssetKeys)
+            {
+                var asset = await GameManager.Instance.Assets.InstantiateAsset<BaseUI>(kvp.Value);
+                asset.gameObject.SetActive(false);
+                asset.Init();
+                _cacheUIs.Add(kvp.Key, asset);
+            }
+        }
+
+        public void OpenUI(ClientEnum.EUIType type)
+        {
+            if (TryFindModel(type, out var model) == false)
             {
                 
             }
             
             model.Open();
-            Debug.Log($"Showing UI: {uiType}");
+            Debug.Log($"Showing UI: {type}");
         }
         
-        public void CloseUI(ClientEnum.EUIType uiType)
+        public void CloseUI(ClientEnum.EUIType type)
         {
-            if (TryFindModel(uiType, out var model) == false)
+            if (TryFindModel(type, out var model) == false)
             {
-                Debug.LogWarning("UI not found: " + uiType);
+                Debug.LogWarning("UI not found: " + type);
                 return;
             }
             
             model.Close();
-            Debug.Log($"Closing UI: {uiType}");
+            Debug.Log($"Closing UI: {type}");
         }
         
-        public bool TryFindModel(ClientEnum.EUIType uiType, out BaseUIModel model)
+        public bool TryFindModel(ClientEnum.EUIType type, out BaseUIModel result)
         {
-            model = null;
+            result = null;
             
-            if (_uiBindings.TryGetValue(uiType, out var result) == false)
+            if (_cacheUIModels.TryGetValue(type, out result) == false)
             {
                 return false;
             }
             
-            model = result.UIModel;
-            return model != null;
+            return result != null;
+        }
+
+        private bool TryFindUI(ClientEnum.EUIType type, out BaseUI result)
+        {
+            result = null;
+            if (_cacheUIs.TryGetValue(type, out result) == false)
+            {
+                return false;
+            }
+
+            return result != null;
         }
     }
 }

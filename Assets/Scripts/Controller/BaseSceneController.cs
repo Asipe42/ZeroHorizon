@@ -1,6 +1,5 @@
 ﻿using Config;
 using Define;
-using Manager;
 using UnityEngine;
 
 namespace Controller
