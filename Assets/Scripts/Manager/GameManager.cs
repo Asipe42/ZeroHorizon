@@ -9,6 +9,7 @@ namespace Manager
     public partial class GameManager : MonoSingleton<GameManager>
     {
         public UIManager UI { get; private set; }
+        public AssetManager Assets { get; private set; }
         
         protected override void Awake()
         {
@@ -32,6 +33,7 @@ namespace Manager
         private void InitSubManager()
         {
             UI = new UIManager();
+            Assets = new AssetManager();
         }
     }
 }
