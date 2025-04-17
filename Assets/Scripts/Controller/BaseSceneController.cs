@@ -1,5 +1,7 @@
 ﻿using Config;
 using Define;
+using Manager;
+using UI;
 using UnityEngine;
 
 namespace Controller
@@ -27,7 +29,7 @@ namespace Controller
 
         protected virtual void OnInit()
         {
-            // GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.Login);
+            // GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.Login, new LoginUIModel());
         }
 
         protected virtual void OnCleanUp()

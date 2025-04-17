@@ -10,65 +10,70 @@ namespace Manager
     public class UIManager
     {
         private readonly Dictionary<ClientEnum.EUIType, BaseUI> _cacheUIs = new();
-        private readonly Dictionary<ClientEnum.EUIType, BaseUIModel> _cacheUIModels = new();
         private UIConfig _config;
         
         public async UniTask Init()
         {
             /*
-             * 초기화 과정
-             *  1. Config 로드
-             *  2. BaseUI 로드 및 초기화
+             * Init 과정
+             *  - Config 로드
+             *  - BaseUI 로드 및 초기화
              */
             
-            // No.1
             _config = await GameManager.Instance.Assets.LoadAsset<UIConfig>(key: nameof(UIConfig));
             
-            // No.2
             foreach (var kvp in _config.AssetKeys)
             {
                 var asset = await GameManager.Instance.Assets.InstantiateAsset<BaseUI>(kvp.Value);
-                asset.gameObject.SetActive(false);
                 asset.Init();
+                
                 _cacheUIs.Add(kvp.Key, asset);
             }
         }
 
-        public void OpenUI(ClientEnum.EUIType type)
+        public void OpenUI(ClientEnum.EUIType type, BaseUIModel _model)
         {
-            if (TryFindModel(type, out var model) == false)
+            /*
+             * OpenUI 과정
+             *  - UI를 얻는다.
+             *  - UI에 모델을 주입한다.
+             *  - UI를 연다.
+             */
+
+            if (TryFindUI(type, out var ui) == false)
             {
-                
+                Debug.LogError($"Unable to find UI matching type: {type}");
+                return;
             }
-            
-            model.Open();
-            Debug.Log($"Showing UI: {type}");
+
+            _model.Init();
+            ui.BindModel(_model);
+            ui.Open();
+
+            Debug.Log($"Open UI: {type}");
         }
         
         public void CloseUI(ClientEnum.EUIType type)
         {
-            if (TryFindModel(type, out var model) == false)
+            /*
+             * CloseUI 과정
+             *  - UI와 모델을 얻는다.
+             *  - UI와 모델을 정리한다.
+             *  - UI를 끈다.
+             */
+            
+            if (TryFindUI(type, out var ui) == false)
             {
-                Debug.LogWarning("UI not found: " + type);
+                Debug.LogError($"Unable to find UI matching type: {type}");
                 return;
             }
             
-            model.Close();
-            Debug.Log($"Closing UI: {type}");
+            ui.CleanUp();
+            ui.Close();
+            
+            Debug.Log($"Close UI: {type}");
         }
         
-        public bool TryFindModel(ClientEnum.EUIType type, out BaseUIModel result)
-        {
-            result = null;
-            
-            if (_cacheUIModels.TryGetValue(type, out result) == false)
-            {
-                return false;
-            }
-            
-            return result != null;
-        }
-
         private bool TryFindUI(ClientEnum.EUIType type, out BaseUI result)
         {
             result = null;

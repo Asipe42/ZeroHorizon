@@ -5,23 +5,13 @@ namespace UI
     public class BaseUIModel
     {
         public ClientEnum.EUIType UIType { get; protected set; }
-        
-        public virtual void Open()
-        {
-            OnOpen();
-        }
 
-        public virtual void Close()
-        {
-            OnClose();
-        }
-
-        protected virtual void OnOpen()
+        public virtual void Init()
         {
             
         }
 
-        protected virtual void OnClose()
+        public virtual void CleanUp()
         {
             
         }
