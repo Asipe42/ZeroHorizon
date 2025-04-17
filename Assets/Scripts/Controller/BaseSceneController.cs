@@ -28,7 +28,7 @@ namespace Controller
 
         protected virtual void OnInit()
         {
-            GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.Login);
+            // GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.Login);
         }
 
         protected virtual void OnCleanUp()
