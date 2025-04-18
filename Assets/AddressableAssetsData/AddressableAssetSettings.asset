@@ -75,7 +75,7 @@ MonoBehaviour:
       - m_Id: 15653125ce007fe418997edf3c64cd3f
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 35f08f25b9cbadd4f85c6f98c0e48363
-        m_Value: https://storage.googleapis.com/zerohorizon-unity-addressables/
+        m_Value: 'http://192.168.0.68:8080/[BuildTarget]'
       - m_Id: 3b8039d01e984654db0b372bd8eceeb2
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 67762eea097840c4884f41f785b1891a

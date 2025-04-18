@@ -29,6 +29,8 @@ namespace Manager
                 
                 _cacheUIs.Add(kvp.Key, asset);
             }
+            
+            Debug.Log($"Initialize {nameof(UIManager)}");
         }
 
         public void OpenUI(ClientEnum.EUIType type, BaseUIModel _model)

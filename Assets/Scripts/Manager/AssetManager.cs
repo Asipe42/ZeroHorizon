@@ -10,7 +10,7 @@ namespace Manager
     {
         public void Init()
         {
-            
+            Debug.Log($"Initializing {nameof(AssetManager)}");
         }
         
         public async UniTask<T> LoadAsset<T>(string key) where T : UnityEngine.Object
