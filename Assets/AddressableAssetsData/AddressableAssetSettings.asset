@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 6b5fb0b502ef9654483b0fed9ee836fb
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 85ea36d3e9af31fe82c955991a809b58
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
       - m_Id: 15653125ce007fe418997edf3c64cd3f
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 35f08f25b9cbadd4f85c6f98c0e48363
-        m_Value: 'http://192.168.0.68:8080/[BuildTarget]'
+        m_Value: 'https://storage.googleapis.com/zerohorizon-unity-addressables/[BuildTarget]'
       - m_Id: 3b8039d01e984654db0b372bd8eceeb2
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 67762eea097840c4884f41f785b1891a

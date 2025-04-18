@@ -45,7 +45,6 @@ namespace Manager
             Assets.Init();
 
             await UniTask.Yield();
-            Debug.Log($"Complete {nameof(InitAssetManager)}");
         }
 
         private async UniTask InitUIManager()
@@ -54,7 +53,6 @@ namespace Manager
             await UI.Init();
             
             await UniTask.Yield();
-            Debug.Log($"Complete {nameof(InitUIManager)}");
         }
     }
 }
