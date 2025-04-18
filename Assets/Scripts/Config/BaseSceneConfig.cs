@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
 
 namespace Config
 {
-    public class BaseSceneConfig : ScriptableObject
+    public class BaseSceneConfig : SerializedScriptableObject
     {
         
     }
