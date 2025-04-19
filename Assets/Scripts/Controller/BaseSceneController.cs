@@ -29,7 +29,7 @@ namespace Controller
 
         protected virtual void OnInit()
         {
-            // GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.Login, new LoginUIModel());
+            
         }
 
         protected virtual void OnCleanUp()

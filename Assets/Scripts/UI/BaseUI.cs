@@ -4,7 +4,7 @@ namespace UI
 {
     public class BaseUI : MonoBehaviour
     {
-        private BaseUIModel _model;
+        protected BaseUIModel _model;
 
         public virtual void Init()
         {

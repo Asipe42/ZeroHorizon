@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,31 +13,30 @@ namespace Manager
     {
         public UIManager UI { get; private set; }
         public AssetManager Assets { get; private set; }
+        public AuthManager Auth { get; private set; }
         
         public bool IsInit { get; private set; }
+
+        public event Action OnInitAssetManager;
+        public event Action OnInitUIManager;
+        public event Action OnInitAuthManager;
         
         protected override void Awake()
         {
             base.Awake();
-
-            Init().Forget();
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
-        private async UniTaskVoid Init()
+        public async UniTaskVoid Init()
         {
             IsInit = false;
             
-            InitEvent();
             await InitAssetManager();
             await InitUIManager();
+            await InitAuthManager();
 
             IsInit = true;
-        }
-
-        private void InitEvent()
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
         
         private async UniTask InitAssetManager()
@@ -44,7 +44,10 @@ namespace Manager
             Assets = new AssetManager();
             Assets.Init();
 
-            await UniTask.Yield();
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            Debug.Log($"Complete Initialize {nameof(AssetManager)}");
+            
+            OnInitAssetManager?.Invoke();
         }
 
         private async UniTask InitUIManager()
@@ -52,7 +55,21 @@ namespace Manager
             UI = new UIManager();
             await UI.Init();
             
-            await UniTask.Yield();
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            Debug.Log($"Complete Initialize {nameof(UIManager)}");
+            
+            OnInitUIManager?.Invoke();
+        }
+
+        private async UniTask InitAuthManager()
+        {
+            Auth = new AuthManager();
+            await Auth.Init();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            Debug.Log($"Complete Initialize {nameof(AuthManager)}");
+            
+            OnInitAuthManager?.Invoke();
         }
     }
 }

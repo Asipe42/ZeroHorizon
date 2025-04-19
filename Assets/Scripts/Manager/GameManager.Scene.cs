@@ -11,10 +11,10 @@ namespace Manager
         public ClientEnum.ESceneType CurrentSceneType { get; private set; }
         public BaseSceneController CurrentSceneController { get; private set; }
 
-        private Dictionary<ClientEnum.ESceneType, LoadSceneParameters> _sceneParameters = new()
+        private readonly Dictionary<ClientEnum.ESceneType, LoadSceneParameters> _sceneParameters = new()
         {
+            { ClientEnum.ESceneType.Empty, new LoadSceneParameters(LoadSceneMode.Single) },
             { ClientEnum.ESceneType.Entry, new LoadSceneParameters(LoadSceneMode.Single) },
-            { ClientEnum.ESceneType.Auth, new LoadSceneParameters(LoadSceneMode.Single) },
             { ClientEnum.ESceneType.Main, new LoadSceneParameters(LoadSceneMode.Single) },
         };
         

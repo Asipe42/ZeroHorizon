@@ -5,15 +5,16 @@
         public enum ESceneType
         {
             None = 0,
-            Entry = 1,
-            Auth = 2,
+            Empty = 1,
+            Entry = 2,
             Main = 3,
         }
 
         public enum EUIType
         {
-            None = 0,
-            Login = 1,
+            None,
+            Entry,
+            Login,
         }
     }
 }

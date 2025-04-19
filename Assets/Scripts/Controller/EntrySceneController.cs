@@ -1,21 +1,43 @@
 ﻿using Define;
 using Manager;
+using UI;
+using UnityEngine;
 
 namespace Controller
 {
     /// <summary>
-    /// 프로그램 진입점
+    /// 로그인 씬
     /// </summary>
     public class EntrySceneController : BaseSceneController
     {
-        public override ClientEnum.ESceneType Type => ClientEnum.ESceneType.Entry;
+        [SerializeField] private EntryUI entryUI;
         
-        protected override void OnInit()
+        public override ClientEnum.ESceneType Type => ClientEnum.ESceneType.Entry;
+
+        public override void Init()
         {
-            base.OnInit();
+            base.Init();
             
-            // 초기화 이후 [Auth]로 이동한다.
-            GameManager.Instance.LoadScene(ClientEnum.ESceneType.Auth);
+            /*
+             * 초기화
+             *  1. 게임 매니저 초기화
+             *      - 초기화 과정을 표시 (EntryUI)
+             *  2. 계정 정보를 가져온다.
+             *  3. 계정 정보를 가져오지 못한 경우 신규 계정 UI 표시
+             */
+            
+            OpenEntryUI();
+            GameManager.Instance.Init().Forget();
+        }
+
+        private void OpenEntryUI()
+        {
+            EntryUIModel model = new();
+            model.Init();
+            
+            entryUI.BindModel(model);
+            entryUI.Init();
+            entryUI.Open();
         }
     }
 }

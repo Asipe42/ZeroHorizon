@@ -10,7 +10,7 @@ namespace Manager
     {
         public void Init()
         {
-            Debug.Log($"Initializing {nameof(AssetManager)}");
+            
         }
         
         public async UniTask<T> LoadAsset<T>(string key) where T : UnityEngine.Object
@@ -20,13 +20,13 @@ namespace Manager
             try
             {
                 T result = await handle.ToUniTask();
-                Debug.Log($"File {key} loaded");
+                Debug.Log($"{key} loaded");
                 
                 return result;
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"File {key} could not be loaded: {e.Message}");
+                Debug.LogWarning($"{key} could not be loaded: {e.Message}");
                 return null;
             }
         }
@@ -38,13 +38,13 @@ namespace Manager
             try
             {
                 GameObject result = await handle.ToUniTask();
-                Debug.Log($"File {key} instantiated");
+                Debug.Log($"{key} instantiated");
                 
                 return result.GetComponent<T>();
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"File {key} could not be instantiated");
+                Debug.LogWarning($"{key} could not be instantiated");
                 return null;
             }
         }
