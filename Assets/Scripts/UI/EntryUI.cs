@@ -36,7 +36,8 @@ namespace UI
         public override void Open()
         {
             base.Open();
-            
+
+            InitPanel();
             InitProgress();
             InitDescription();
         }
@@ -61,6 +62,12 @@ namespace UI
             GameManager.Instance.OnInitAuthManager += OnInitAuthManager;
         }
 
+        private void InitPanel()
+        {
+            loadingPanel.SetActive(true);
+            loginPanel.SetActive(false);
+        }
+        
         private void InitProgress()
         {
             progressBar.minValue = 0f;
@@ -101,6 +108,8 @@ namespace UI
         {
             SetProgress(1.0f);
             SetDescription("Initializing Auth Manager");
+            
+            loginPanel.SetActive(true);
         }
 
         private void OnLogin()
