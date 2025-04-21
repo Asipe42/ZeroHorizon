@@ -18,6 +18,7 @@ namespace UI
         [FoldoutGroup("로그인")] [SerializeField] private GameObject loginPanel;
         [FoldoutGroup("로그인")] [SerializeField] private TMP_InputField emailInputField;
         [FoldoutGroup("로그인")] [SerializeField] private TMP_InputField passwordInputField;
+        [FoldoutGroup("로그인")] [SerializeField] private Button createAccountButton;
         [FoldoutGroup("로그인")] [SerializeField] private Button loginButton;
         [FoldoutGroup("로그인")] [SerializeField] private Button googleLoginButton;
         
@@ -30,6 +31,7 @@ namespace UI
 
         private void Bind()
         {
+            createAccountButton.onClick.AddListener(CreateAccount);
             loginButton.onClick.AddListener(OnLogin);
             googleLoginButton.onClick.AddListener(OnGoogleLogin);
         }
@@ -144,6 +146,26 @@ namespace UI
             loginPanel.SetActive(true);
         }
 
+        private void CreateAccount()
+        {
+            string email = emailInputField.text;
+            string password = passwordInputField.text;
+
+            if (IsValidEmail(email) == false)
+            {
+                Debug.LogError($"올바르지 않은 이메일 형식입니다.");
+                return;
+            }
+
+            if (IsValidPassword(password) == false)
+            {
+                Debug.LogError($"올바르지 않은 패스워드 형식입니다.");
+                return;
+            }
+            
+            GameManager.Instance.Auth.CreateAccountWithEmailAndPassword(email, password).Forget();
+        }
+
         private void OnLogin()
         {
             string email = emailInputField.text;
@@ -161,7 +183,7 @@ namespace UI
                 return;
             }
             
-            GameManager.Instance.Auth.SignInWithEmail(email, password).Forget();
+            GameManager.Instance.Auth.SignInWithEmailAndPassword(email, password).Forget();
         }
 
         private void OnGoogleLogin()

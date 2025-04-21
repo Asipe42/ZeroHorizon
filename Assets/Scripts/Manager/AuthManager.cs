@@ -36,30 +36,13 @@ namespace Manager
             });
         }
 
-        public async UniTask SignInWithEmail(string email, string password)
+        public async UniTask SignInWithEmailAndPassword(string email, string password)
         {
             try
             {
-                // 계정이 없을 경우 자동 생성 후 로그인 시도
                 AuthResult userCredential = await _auth.SignInWithEmailAndPasswordAsync(email, password);
                 _user = userCredential.User;
-                
                 Debug.Log($"User signed in successfully: {_user.Email}");
-            }
-            catch (FirebaseException ex) when (ex.ErrorCode == (int)AuthError.UserNotFound)
-            {
-                Debug.Log("User not found. Trying to create a new user...");
-
-                try
-                {
-                    AuthResult newUserCredential = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
-                    _user = newUserCredential.User;
-                    Debug.Log($"User created and signed in: {_user.Email}");
-                }
-                catch (Exception createEx)
-                {
-                    Debug.LogError($"User creation failed: {createEx}");
-                }
             }
             catch (Exception ex)
             {
@@ -70,6 +53,21 @@ namespace Manager
         public async UniTask SignInWithGoogle()
         {
             
+        }
+        
+        public async UniTask CreateAccountWithEmailAndPassword(string email, string password)
+        {
+            try
+            {
+                AuthResult newUserCredential = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
+                _user = newUserCredential.User;
+                Debug.Log($"User created and signed in: {_user.Email}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
 }
