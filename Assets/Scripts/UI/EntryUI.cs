@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using Cysharp.Threading.Tasks;
 using Manager;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -91,6 +92,37 @@ namespace UI
         {
             descriptionText.text = text;
         }
+
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            /*
+             * 정규식
+             *  - [^@\s]+ : @나 공백이 없는 문자열로 시작
+             *  - @ : 반드시 @ 포함
+             *  - [^@\s]+ : 도메인 이름
+             *  - \. : 점 포함
+             *  - [^@\s]+ : 도메인 끝 (예: .com, .net 등)
+             */
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
+
+        private bool IsValidPassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+            
+            /*
+             * 정규식
+             *  - [a-zA-Z0-9]: 영문 대소문자와 숫자 허용
+             *  - {6,}: 6자 이상
+             */
+            string pattern = @"^[a-zA-Z0-9]{6,}$";
+            return Regex.IsMatch(password, pattern);
+        }
         
         private void OnInitAssetManager()
         {
@@ -116,6 +148,19 @@ namespace UI
         {
             string email = emailInputField.text;
             string password = passwordInputField.text;
+
+            if (IsValidEmail(email) == false)
+            {
+                Debug.LogError($"올바르지 않은 이메일 형식입니다.");
+                return;
+            }
+
+            if (IsValidPassword(password) == false)
+            {
+                Debug.LogError($"올바르지 않은 패스워드 형식입니다.");
+                return;
+            }
+            
             GameManager.Instance.Auth.SignInWithEmail(email, password).Forget();
         }
 
