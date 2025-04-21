@@ -14,7 +14,7 @@
         {
             None,
             Entry,
-            Login,
+            ToastMessage,
         }
     }
 }

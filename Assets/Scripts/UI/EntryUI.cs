@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
+using Define;
 using Manager;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -35,22 +36,22 @@ namespace UI
             loginButton.onClick.AddListener(OnLogin);
             googleLoginButton.onClick.AddListener(OnGoogleLogin);
         }
-
-        public override void Open()
-        {
-            base.Open();
-
-            InitPanel();
-            InitProgress();
-            InitDescription();
-        }
-
+        
         public override void Init()
         {
             base.Init();
             Model = _model as EntryUIModel;
             
             BindEvent();
+        }
+
+        public override void Open()
+        {
+            base.Open();
+            
+            InitPanel();
+            InitProgress();
+            InitDescription();
         }
         
         private void BindEvent()
@@ -84,13 +85,13 @@ namespace UI
             descriptionText.text = string.Empty;
         }
 
-        private void SetProgress(float progress)
+        private void ShowProgress(float progress)
         {
             progressBar.value = progress;
             progressText.text = $"{progress * 100:F0}%";
         }
         
-        private void SetDescription(string text)
+        private void ShowDescription(string text)
         {
             descriptionText.text = text;
         }
@@ -128,20 +129,20 @@ namespace UI
         
         private void OnInitAssetManager()
         {
-            SetProgress(0.3f);
-            SetDescription("Initializing Asset Manager");
+            ShowProgress(0.3f);
+            ShowDescription("Initializing Asset Manager");
         }
 
         private void OnInitUIManager()
         {
-            SetProgress(0.6f);
-            SetDescription("Initializing UI Manager");
+            ShowProgress(0.6f);
+            ShowDescription("Initializing UI Manager");
         }
         
         private void OnInitAuthManager()
         {
-            SetProgress(1.0f);
-            SetDescription("Initializing Auth Manager");
+            ShowProgress(1.0f);
+            ShowDescription("Initializing Auth Manager");
             
             loginPanel.SetActive(true);
         }
@@ -153,13 +154,19 @@ namespace UI
 
             if (IsValidEmail(email) == false)
             {
-                Debug.LogError($"올바르지 않은 이메일 형식입니다.");
+                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                {
+                    Message = "올바르지 않은 이메일 형식입니다."
+                });
                 return;
             }
 
             if (IsValidPassword(password) == false)
             {
-                Debug.LogError($"올바르지 않은 패스워드 형식입니다.");
+                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                {
+                    Message = "올바르지 않은 패스워드 형식입니다."
+                });
                 return;
             }
             
@@ -173,13 +180,19 @@ namespace UI
 
             if (IsValidEmail(email) == false)
             {
-                Debug.LogError($"올바르지 않은 이메일 형식입니다.");
+                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                {
+                    Message = "올바르지 않은 이메일 형식입니다."
+                });
                 return;
             }
 
             if (IsValidPassword(password) == false)
             {
-                Debug.LogError($"올바르지 않은 패스워드 형식입니다.");
+                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                {
+                    Message = "올바르지 않은 패스워드 형식입니다."
+                });
                 return;
             }
             

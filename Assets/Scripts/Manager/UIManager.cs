@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Manager
 {
-    public class UIManager
+    public partial class UIManager
     {
         private readonly Dictionary<ClientEnum.EUIType, BaseUI> _cacheUIs = new();
         private UIConfig _config;
@@ -48,6 +48,7 @@ namespace Manager
 
             _model.Init();
             ui.BindModel(_model);
+            ui.Init();
             ui.Open();
 
             Debug.Log($"Open UI: {type}");

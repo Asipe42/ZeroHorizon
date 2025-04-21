@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: UI
   m_GUID: 291f51f97daf848498af07d3be39b249
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: ce7528d064b480446be6deb7b19c8e38
+    m_Address: ToastMessageUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bf5af5ca8dbb5214fb8966cb18dbceb9, type: 2}
   m_SchemaSet:
