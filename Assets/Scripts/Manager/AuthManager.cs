@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Define;
 using Firebase;
 using Firebase.Auth;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace Manager
             });
         }
 
-        public async UniTask SignInWithEmailAndPassword(string email, string password, Action successCallback = null, Action failedCallback = null)
+        public async UniTask SignInWithEmailAndPassword(string email, string password, Action successCallback = null, Action<ClientEnum.EAuthError> failedCallback = null)
         {
             try
             {
@@ -46,9 +47,10 @@ namespace Manager
                 successCallback?.Invoke();
                 Debug.Log($"User signed in successfully: {_user.Email}");
             }
-            catch (Exception ex)
+            catch (FirebaseException ex)
             {
-                failedCallback?.Invoke();
+                ClientEnum.EAuthError errorCode = (ClientEnum.EAuthError)ex.ErrorCode;
+                failedCallback?.Invoke(errorCode);
                 Debug.LogError($"Sign in failed: {ex}");
             }
         }
@@ -58,7 +60,7 @@ namespace Manager
             
         }
         
-        public async UniTask CreateAccountWithEmailAndPassword(string email, string password, Action successCallback = null, Action failedCallback = null)
+        public async UniTask CreateAccountWithEmailAndPassword(string email, string password, Action successCallback = null, Action<ClientEnum.EAuthError> failedCallback = null)
         {
             try
             {
@@ -68,9 +70,10 @@ namespace Manager
                 successCallback?.Invoke();
                 Debug.Log($"User created and signed in: {_user.Email}");
             }
-            catch (Exception ex)
+            catch (FirebaseException ex)
             {
-                failedCallback?.Invoke();
+                ClientEnum.EAuthError errorCode = (ClientEnum.EAuthError)ex.ErrorCode;
+                failedCallback?.Invoke(errorCode);
                 Debug.LogError($"User create failed: {ex}");
                 throw;
             }

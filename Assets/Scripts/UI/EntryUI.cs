@@ -170,24 +170,37 @@ namespace UI
                 });
                 return;
             }
-            
+
+            createAccountButton.interactable = false;
             GameManager.Instance.Auth.CreateAccountWithEmailAndPassword
             (
                 email: email, 
                 password: password,
                 successCallback: () =>
                 {
+                    createAccountButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
                     {
-                        Message = "회원가입이 성공하였습니다."
+                        Message = "회원가입에 성공하였습니다."
                     });
                 },
-                failedCallback: () =>
+                failedCallback: errorCode =>
                 {
-                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    createAccountButton.interactable = true;
+                    if (errorCode == ClientEnum.EAuthError.EmailAlreadyInUse)
                     {
-                        Message = "회원가입이 실패하였습니다."
-                    });
+                        GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                        {
+                            Message = "이미 존재하는 계정입니다."
+                        });
+                    }
+                    else
+                    {
+                        GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                        {
+                            Message = "회원가입에 실패하였습니다."
+                        });
+                    }
                 }
             ).Forget();
         }
@@ -214,23 +227,26 @@ namespace UI
                 });
                 return;
             }
-            
+
+            loginButton.interactable = false;
             GameManager.Instance.Auth.SignInWithEmailAndPassword
             (
                 email: email, 
                 password: password,
                 successCallback: () =>
                 {
+                    loginButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
                     {
                         Message = "로그인이 성공하였습니다."
                     });
                 },
-                failedCallback: () =>
+                failedCallback: _ =>
                 {
+                    loginButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
                     {
-                        Message = "로그인이 실패하였습니다."
+                        Message = "로그인에 실패하였습니다."
                     });
                 }
             ).Forget();

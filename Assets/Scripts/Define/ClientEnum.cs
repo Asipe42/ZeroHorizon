@@ -16,5 +16,10 @@
             Entry,
             ToastMessage,
         }
+
+        public enum EAuthError
+        {
+            EmailAlreadyInUse = 8,
+        }
     }
 }
