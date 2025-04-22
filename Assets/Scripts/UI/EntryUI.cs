@@ -22,6 +22,11 @@ namespace UI
         [FoldoutGroup("로그인")] [SerializeField] private Button createAccountButton;
         [FoldoutGroup("로그인")] [SerializeField] private Button loginButton;
         [FoldoutGroup("로그인")] [SerializeField] private Button googleLoginButton;
+
+        [FoldoutGroup("인증")] [SerializeField] private GameObject approvePanel;
+        [FoldoutGroup("인증")] [SerializeField] private TMP_InputField approveInputField;
+        [FoldoutGroup("인증")] [SerializeField] private Button approveButton;
+        [FoldoutGroup("인증")] [SerializeField] private Button closeApproveButton;
         
         public EntryUIModel Model { get; private set; }
 
@@ -35,6 +40,8 @@ namespace UI
             createAccountButton.onClick.AddListener(CreateAccount);
             loginButton.onClick.AddListener(OnLogin);
             googleLoginButton.onClick.AddListener(OnGoogleLogin);
+            approveButton.onClick.AddListener(OnApprove);
+            closeApproveButton.onClick.AddListener(OnCloseApprove);
         }
         
         public override void Init()
@@ -70,6 +77,7 @@ namespace UI
         {
             loadingPanel.SetActive(true);
             loginPanel.SetActive(false);
+            approvePanel.SetActive(false);
         }
         
         private void InitProgress()
@@ -172,7 +180,7 @@ namespace UI
             }
 
             createAccountButton.interactable = false;
-            GameManager.Instance.Auth.CreateAccountWithEmailAndPassword
+            GameManager.Instance.Auth.CreateAccountWithEmail
             (
                 email: email, 
                 password: password,
@@ -229,7 +237,7 @@ namespace UI
             }
 
             loginButton.interactable = false;
-            GameManager.Instance.Auth.SignInWithEmailAndPassword
+            GameManager.Instance.Auth.SignInWithEmail
             (
                 email: email, 
                 password: password,
@@ -254,7 +262,19 @@ namespace UI
 
         private void OnGoogleLogin()
         {
-            GameManager.Instance.Auth.SignInWithGoogle().Forget();
+            GameManager.Instance.Auth.OpenGoogleAuthURL();
+            approvePanel.SetActive(true);
+        }
+
+        private void OnApprove()
+        {
+            string code = approveInputField.text;
+            GameManager.Instance.Auth.SignInWithGoogle(code).Forget();
+        }
+
+        private void OnCloseApprove()
+        {
+            approvePanel.SetActive(false);
         }
     }
 }
