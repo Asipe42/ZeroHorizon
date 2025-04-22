@@ -163,7 +163,7 @@ namespace UI
 
             if (IsValidEmail(email) == false)
             {
-                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                 {
                     Message = "올바르지 않은 이메일 형식입니다."
                 });
@@ -172,7 +172,7 @@ namespace UI
 
             if (IsValidPassword(password) == false)
             {
-                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                 {
                     Message = "올바르지 않은 패스워드 형식입니다."
                 });
@@ -187,7 +187,7 @@ namespace UI
                 successCallback: () =>
                 {
                     createAccountButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                     {
                         Message = "회원가입에 성공하였습니다."
                     });
@@ -195,16 +195,16 @@ namespace UI
                 failedCallback: errorCode =>
                 {
                     createAccountButton.interactable = true;
-                    if (errorCode == ClientEnum.EAuthError.EmailAlreadyInUse)
+                    if (errorCode == EAuthError.EmailAlreadyInUse)
                     {
-                        GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                        GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                         {
                             Message = "이미 존재하는 계정입니다."
                         });
                     }
                     else
                     {
-                        GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                        GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                         {
                             Message = "회원가입에 실패하였습니다."
                         });
@@ -220,7 +220,7 @@ namespace UI
 
             if (IsValidEmail(email) == false)
             {
-                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                 {
                     Message = "올바르지 않은 이메일 형식입니다."
                 });
@@ -229,7 +229,7 @@ namespace UI
 
             if (IsValidPassword(password) == false)
             {
-                GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                 {
                     Message = "올바르지 않은 패스워드 형식입니다."
                 });
@@ -244,7 +244,7 @@ namespace UI
                 successCallback: () =>
                 {
                     loginButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                     {
                         Message = "로그인이 성공하였습니다."
                     });
@@ -252,7 +252,7 @@ namespace UI
                 failedCallback: _ =>
                 {
                     loginButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                     {
                         Message = "로그인에 실패하였습니다."
                     });
@@ -263,6 +263,7 @@ namespace UI
         private void OnGoogleLogin()
         {
             GameManager.Instance.Auth.OpenGoogleAuthURL();
+            loginPanel.SetActive(false);
             approvePanel.SetActive(true);
         }
 
@@ -275,6 +276,7 @@ namespace UI
         private void OnCloseApprove()
         {
             approvePanel.SetActive(false);
+            loginPanel.SetActive(true);
         }
     }
 }

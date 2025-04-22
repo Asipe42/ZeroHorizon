@@ -1,7 +1,5 @@
 ﻿using Config;
 using Define;
-using Manager;
-using UI;
 using UnityEngine;
 
 namespace Controller
@@ -15,7 +13,7 @@ namespace Controller
         [field: SerializeField] public Light MainLight { get; private set; }
         [field: SerializeField] public BaseSceneConfig Config { get; private set; }
 
-        public virtual ClientEnum.ESceneType Type { get; protected set; }
+        public virtual ESceneType Type { get; protected set; }
         
         public virtual void Init()
         {

@@ -44,7 +44,7 @@ namespace Manager
             });
         }
 
-        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action<ClientEnum.EAuthError> failedCallback = null)
+        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action<EAuthError> failedCallback = null)
         {
             try
             {
@@ -56,16 +56,16 @@ namespace Manager
             }
             catch (FirebaseException ex)
             {
-                ClientEnum.EAuthError errorCode = (ClientEnum.EAuthError)ex.ErrorCode;
+                EAuthError errorCode = (EAuthError)ex.ErrorCode;
                 failedCallback?.Invoke(errorCode);
                 Debug.LogError($"Sign in failed: {ex}");
             }
         }
         
-        public async UniTask SignInWithGoogle(string authorizationCode)
+        public async UniTask SignInWithGoogle(string code, Action successCallback = null, Action<EAuthError> failedCallback = null)
         {
             using var request = new UnityWebRequest("https://oauth2.googleapis.com/token", "POST");
-            string body = $"code={UnityWebRequest.EscapeURL(authorizationCode)}&" +
+            string body = $"code={UnityWebRequest.EscapeURL(code)}&" +
                           $"client_id={UnityWebRequest.EscapeURL(ClientID)}&" +
                           $"client_secret={UnityWebRequest.EscapeURL(ClientSecret)}&" +
                           $"redirect_uri={UnityWebRequest.EscapeURL(RedirectUri)}&" +
@@ -89,11 +89,15 @@ namespace Manager
                 try
                 {
                     FirebaseUser user = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
+                    
+                    successCallback?.Invoke();
                     Debug.Log("User signed in: " + user.DisplayName);
                 }
-                catch (FirebaseException e)
+                catch (FirebaseException ex)
                 {
-                    Debug.LogError("Error signing in with Google: " + e.Message);
+                    EAuthError errorCode = (EAuthError)ex.ErrorCode;
+                    failedCallback?.Invoke(errorCode);
+                    Debug.LogError("Error signing in with Google: " + ex.Message);
                 }
             }
             else
@@ -102,7 +106,7 @@ namespace Manager
             }
         }
         
-        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action<ClientEnum.EAuthError> failedCallback = null)
+        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action<EAuthError> failedCallback = null)
         {
             try
             {
@@ -114,7 +118,7 @@ namespace Manager
             }
             catch (FirebaseException ex)
             {
-                ClientEnum.EAuthError errorCode = (ClientEnum.EAuthError)ex.ErrorCode;
+                EAuthError errorCode = (EAuthError)ex.ErrorCode;
                 failedCallback?.Invoke(errorCode);
                 Debug.LogError($"User create failed: {ex}");
                 throw;

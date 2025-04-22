@@ -8,17 +8,17 @@ namespace Manager
 {
     public partial class GameManager
     {
-        public ClientEnum.ESceneType CurrentSceneType { get; private set; }
+        public ESceneType CurrentSceneType { get; private set; }
         public BaseSceneController CurrentSceneController { get; private set; }
 
-        private readonly Dictionary<ClientEnum.ESceneType, LoadSceneParameters> _sceneParameters = new()
+        private readonly Dictionary<ESceneType, LoadSceneParameters> _sceneParameters = new()
         {
-            { ClientEnum.ESceneType.Empty, new LoadSceneParameters(LoadSceneMode.Single) },
-            { ClientEnum.ESceneType.Entry, new LoadSceneParameters(LoadSceneMode.Single) },
-            { ClientEnum.ESceneType.Main, new LoadSceneParameters(LoadSceneMode.Single) },
+            { ESceneType.Empty, new LoadSceneParameters(LoadSceneMode.Single) },
+            { ESceneType.Entry, new LoadSceneParameters(LoadSceneMode.Single) },
+            { ESceneType.Main, new LoadSceneParameters(LoadSceneMode.Single) },
         };
         
-        public void LoadScene(ClientEnum.ESceneType sceneType)
+        public void LoadScene(ESceneType sceneType)
         {
             if (CurrentSceneType == sceneType)
             {

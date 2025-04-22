@@ -8,10 +8,10 @@ namespace Config
     [CreateAssetMenu(menuName = "SO/Config/UI/UIConfig")]
     public class UIConfig : SerializedScriptableObject
     {
-        [SerializeField] private Dictionary<ClientEnum.EUIType, string> _assetKeys = new();
-        [SerializeField] private Dictionary<ClientEnum.EUIType, int> _sortOrders = new();
+        [SerializeField] private Dictionary<EUIType, string> _assetKeys = new();
+        [SerializeField] private Dictionary<EUIType, int> _sortOrders = new();
         
-        public IReadOnlyDictionary<ClientEnum.EUIType, string> AssetKeys => _assetKeys;
-        public IReadOnlyDictionary<ClientEnum.EUIType, int> SortOrders => _sortOrders;
+        public IReadOnlyDictionary<EUIType, string> AssetKeys => _assetKeys;
+        public IReadOnlyDictionary<EUIType, int> SortOrders => _sortOrders;
     }
 }
