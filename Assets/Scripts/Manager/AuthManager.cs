@@ -36,16 +36,19 @@ namespace Manager
             });
         }
 
-        public async UniTask SignInWithEmailAndPassword(string email, string password)
+        public async UniTask SignInWithEmailAndPassword(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
                 AuthResult userCredential = await _auth.SignInWithEmailAndPasswordAsync(email, password);
                 _user = userCredential.User;
+                
+                successCallback?.Invoke();
                 Debug.Log($"User signed in successfully: {_user.Email}");
             }
             catch (Exception ex)
             {
+                failedCallback?.Invoke();
                 Debug.LogError($"Sign in failed: {ex}");
             }
         }
@@ -55,17 +58,20 @@ namespace Manager
             
         }
         
-        public async UniTask CreateAccountWithEmailAndPassword(string email, string password)
+        public async UniTask CreateAccountWithEmailAndPassword(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
                 AuthResult newUserCredential = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
                 _user = newUserCredential.User;
+                
+                successCallback?.Invoke();
                 Debug.Log($"User created and signed in: {_user.Email}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                failedCallback?.Invoke();
+                Debug.LogError($"User create failed: {ex}");
                 throw;
             }
         }

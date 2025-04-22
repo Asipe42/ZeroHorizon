@@ -144,6 +144,7 @@ namespace UI
             ShowProgress(1.0f);
             ShowDescription("Initializing Auth Manager");
             
+            loadingPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
 
@@ -170,7 +171,25 @@ namespace UI
                 return;
             }
             
-            GameManager.Instance.Auth.CreateAccountWithEmailAndPassword(email, password).Forget();
+            GameManager.Instance.Auth.CreateAccountWithEmailAndPassword
+            (
+                email: email, 
+                password: password,
+                successCallback: () =>
+                {
+                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "회원가입이 성공하였습니다."
+                    });
+                },
+                failedCallback: () =>
+                {
+                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "회원가입이 실패하였습니다."
+                    });
+                }
+            ).Forget();
         }
 
         private void OnLogin()
@@ -196,7 +215,25 @@ namespace UI
                 return;
             }
             
-            GameManager.Instance.Auth.SignInWithEmailAndPassword(email, password).Forget();
+            GameManager.Instance.Auth.SignInWithEmailAndPassword
+            (
+                email: email, 
+                password: password,
+                successCallback: () =>
+                {
+                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "로그인이 성공하였습니다."
+                    });
+                },
+                failedCallback: () =>
+                {
+                    GameManager.Instance.UI.OpenUI(ClientEnum.EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "로그인이 실패하였습니다."
+                    });
+                }
+            ).Forget();
         }
 
         private void OnGoogleLogin()
