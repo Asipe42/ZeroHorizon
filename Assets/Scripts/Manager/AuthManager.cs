@@ -11,6 +11,10 @@ namespace Manager
     {
         private FirebaseAuth _auth;
         private FirebaseUser _user;
+
+        private const string ClientID = "985978133149-mr8pmvd96c3j6eoi3bkbh47bd4a31of9.apps.googleusercontent.com";
+        private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
+        private const string Scope = "email profile openid";
         
         public async UniTask Init()
         {
@@ -57,7 +61,17 @@ namespace Manager
 
         public async UniTask SignInWithGoogle()
         {
-            
+            // 인증 받기
+            string authUrl = string.Join("&", new[]
+            {
+                "https://accounts.google.com/o/oauth2/v2/auth",
+                $"client_id={ClientID}",
+                $"redirect_uri={Uri.EscapeDataString(RedirectUri)}",
+                "response_type=code",
+                $"scope={Uri.EscapeDataString(Scope)}",
+                "access_type=offline"
+            });
+            Application.OpenURL(authUrl);
         }
         
         public async UniTask CreateAccountWithEmailAndPassword(string email, string password, Action successCallback = null, Action<ClientEnum.EAuthError> failedCallback = null)
