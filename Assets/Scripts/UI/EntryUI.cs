@@ -246,7 +246,7 @@ namespace UI
                     loginButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
                     {
-                        Message = "로그인이 성공하였습니다."
+                        Message = "로그인에 성공하였습니다."
                     });
                 },
                 failedCallback: _ =>
@@ -270,7 +270,28 @@ namespace UI
         private void OnApprove()
         {
             string code = approveInputField.text;
-            GameManager.Instance.Auth.SignInWithGoogle(code).Forget();
+
+            approveButton.interactable = false;
+            GameManager.Instance.Auth.SignInWithGoogle
+            (
+                code: code,
+                successCallback: () =>
+                {
+                    approveButton.interactable = true;
+                    GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "로그인에 성공하였습니다."
+                    });
+                },
+                failedCallback: _ =>
+                {
+                    approveButton.interactable = true;
+                    GameManager.Instance.UI.OpenUI(EUIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "로그인에 실패하였습니다."
+                    });
+                }
+            ).Forget();
         }
 
         private void OnCloseApprove()
