@@ -12,7 +12,7 @@ namespace Controller
     {
         [SerializeField] private EntryUI entryUI;
         
-        public override ESceneType Type => ESceneType.Entry;
+        public override SceneType Type => SceneType.Entry;
 
         public override void Init()
         {

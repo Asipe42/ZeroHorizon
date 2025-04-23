@@ -4,6 +4,6 @@ namespace Controller
 {
     public class MainSceneController : BaseSceneController
     {
-        public override ESceneType Type => ESceneType.Main;
+        public override SceneType Type => SceneType.Main;
     }
 }

@@ -13,7 +13,7 @@ namespace Controller
         [field: SerializeField] public Light MainLight { get; private set; }
         [field: SerializeField] public BaseSceneConfig Config { get; private set; }
 
-        public virtual ESceneType Type { get; protected set; }
+        public virtual SceneType Type { get; protected set; }
         
         public virtual void Init()
         {

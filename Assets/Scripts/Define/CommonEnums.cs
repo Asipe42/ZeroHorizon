@@ -1,6 +1,6 @@
 ﻿namespace Define
 {
-    public enum ESceneType
+    public enum SceneType
     {
         None,
         Empty,
@@ -8,14 +8,14 @@
         Main,
     }
 
-    public enum EUIType
+    public enum UIType
     {
         None,
         Entry,
         ToastMessage,
     }
 
-    public enum EAuthError
+    public enum AuthErrorType
     {
         EmailAlreadyInUse = 8,
     }

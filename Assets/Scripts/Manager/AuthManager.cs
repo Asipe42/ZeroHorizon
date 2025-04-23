@@ -44,7 +44,7 @@ namespace Manager
             });
         }
 
-        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action<EAuthError> failedCallback = null)
+        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
         {
             try
             {
@@ -56,13 +56,13 @@ namespace Manager
             }
             catch (FirebaseException ex)
             {
-                EAuthError errorCode = (EAuthError)ex.ErrorCode;
-                failedCallback?.Invoke(errorCode);
+                AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
+                failedCallback?.Invoke(errorTypeCode);
                 Debug.LogError($"Sign in failed: {ex}");
             }
         }
         
-        public async UniTask SignInWithGoogle(string code, Action successCallback = null, Action<EAuthError> failedCallback = null)
+        public async UniTask SignInWithGoogle(string code, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
         {
             using var request = new UnityWebRequest("https://oauth2.googleapis.com/token", "POST");
             string body = $"code={UnityWebRequest.EscapeURL(code)}&" +
@@ -95,8 +95,8 @@ namespace Manager
                 }
                 catch (FirebaseException ex)
                 {
-                    EAuthError errorCode = (EAuthError)ex.ErrorCode;
-                    failedCallback?.Invoke(errorCode);
+                    AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
+                    failedCallback?.Invoke(errorTypeCode);
                     Debug.LogError("Error signing in with Google: " + ex.Message);
                 }
             }
@@ -106,7 +106,7 @@ namespace Manager
             }
         }
         
-        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action<EAuthError> failedCallback = null)
+        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
         {
             try
             {
@@ -118,8 +118,8 @@ namespace Manager
             }
             catch (FirebaseException ex)
             {
-                EAuthError errorCode = (EAuthError)ex.ErrorCode;
-                failedCallback?.Invoke(errorCode);
+                AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
+                failedCallback?.Invoke(errorTypeCode);
                 Debug.LogError($"User create failed: {ex}");
                 throw;
             }

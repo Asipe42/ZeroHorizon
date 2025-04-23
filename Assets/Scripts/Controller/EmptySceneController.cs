@@ -8,13 +8,13 @@ namespace Controller
     /// </summary>
     public class EmptySceneController : BaseSceneController
     {
-        public override ESceneType Type => ESceneType.Empty;
+        public override SceneType Type => SceneType.Empty;
         
         protected override void OnInit()
         {
             base.OnInit();
             
-            GameManager.Instance.LoadScene(ESceneType.Entry);
+            GameManager.Instance.LoadScene(SceneType.Entry);
         }
     }
 }

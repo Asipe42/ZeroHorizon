@@ -9,7 +9,7 @@ namespace Manager
 {
     public partial class UIManager
     {
-        private readonly Dictionary<EUIType, BaseUI> _cacheUIs = new();
+        private readonly Dictionary<UIType, BaseUI> _cacheUIs = new();
         private UIConfig _config;
         
         public async UniTask Init()
@@ -31,7 +31,7 @@ namespace Manager
             }
         }
 
-        public void OpenUI(EUIType type, BaseUIModel _model)
+        public void OpenUI(UIType type, BaseUIModel _model)
         {
             /*
              * OpenUI 과정
@@ -54,7 +54,7 @@ namespace Manager
             Debug.Log($"Open UI: {type}");
         }
         
-        public void CloseUI(EUIType type)
+        public void CloseUI(UIType type)
         {
             /*
              * CloseUI 과정
@@ -75,7 +75,7 @@ namespace Manager
             Debug.Log($"Close UI: {type}");
         }
         
-        private bool TryFindUI(EUIType type, out BaseUI result)
+        private bool TryFindUI(UIType type, out BaseUI result)
         {
             result = null;
             if (_cacheUIs.TryGetValue(type, out result) == false)
