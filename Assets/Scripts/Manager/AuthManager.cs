@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using Define;
 using Firebase;
 using Firebase.Auth;
+using Handler;
 using UnityEngine;
 using UnityEngine.Networking;
-using Cysharp.Threading.Tasks;
 
 namespace Manager
 {
@@ -13,6 +14,7 @@ namespace Manager
     {
         private FirebaseAuth _auth;
         private FirebaseUser _user;
+        private string _uid;
 
         private const string ClientID = "985978133149-mr8pmvd96c3j6eoi3bkbh47bd4a31of9.apps.googleusercontent.com";
         private const string ClientSecret = "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";
@@ -42,34 +44,43 @@ namespace Manager
                 
                 Debug.Log("Firebase Auth initialized.");
             });
+
+            if (LocalDBHandler.TryGetUID(out _uid))
+            {
+                Debug.Log("Login record found.");
+            }
+            else
+            {
+                Debug.Log("No login record found.");
+            }
         }
 
-        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
+        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
-                AuthResult userCredential = await _auth.SignInWithEmailAndPasswordAsync(email, password);
-                _user = userCredential.User;
+                AuthResult authResult = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+                _user = authResult.User;
+                LocalDBHandler.WriteUID(_user.UserId);
                 
                 successCallback?.Invoke();
-                Debug.Log($"User signed in successfully: {_user.Email}");
+                Debug.Log($"User signed in: {_user.UserId}");
             }
             catch (FirebaseException ex)
             {
-                AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
-                failedCallback?.Invoke(errorTypeCode);
-                Debug.LogError($"Sign in failed: {ex}");
+                failedCallback?.Invoke();
+                Debug.LogError($"Sign in failed: {ex.Message}");
             }
         }
         
-        public async UniTask SignInWithGoogle(string code, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
+        public async UniTask SignInWithGoogle(string code, Action successCallback = null, Action failedCallback = null)
         {
             using var request = new UnityWebRequest("https://oauth2.googleapis.com/token", "POST");
             string body = $"code={UnityWebRequest.EscapeURL(code)}&" +
                           $"client_id={UnityWebRequest.EscapeURL(ClientID)}&" +
                           $"client_secret={UnityWebRequest.EscapeURL(ClientSecret)}&" +
                           $"redirect_uri={UnityWebRequest.EscapeURL(RedirectUri)}&" +
-                          $"grant_type=authorization_code";
+                          "grant_type=authorization_code";
             byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
 
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -88,38 +99,39 @@ namespace Manager
                 
                 try
                 {
-                    FirebaseUser user = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
+                    _user = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
+                    LocalDBHandler.WriteUID(_user.UserId);
                     
                     successCallback?.Invoke();
-                    Debug.Log("User signed in: " + user.DisplayName);
+                    Debug.Log($"User signed in: {_user.UserId}");
                 }
                 catch (FirebaseException ex)
                 {
-                    AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
-                    failedCallback?.Invoke(errorTypeCode);
-                    Debug.LogError("Error signing in with Google: " + ex.Message);
+                    failedCallback?.Invoke();
+                    Debug.LogError($"Sign in failed: {ex.Message}");
                 }
             }
             else
             {
+                failedCallback?.Invoke();
                 Debug.LogError($"Token request failed: {request.error}");
             }
         }
         
-        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action<AuthErrorType> failedCallback = null)
+        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
-                AuthResult newUserCredential = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
-                _user = newUserCredential.User;
+                AuthResult authResult = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
+                _user = authResult.User;
+                LocalDBHandler.WriteUID(_user.UserId);
                 
                 successCallback?.Invoke();
                 Debug.Log($"User created and signed in: {_user.Email}");
             }
             catch (FirebaseException ex)
             {
-                AuthErrorType errorTypeCode = (AuthErrorType)ex.ErrorCode;
-                failedCallback?.Invoke(errorTypeCode);
+                failedCallback?.Invoke();
                 Debug.LogError($"User create failed: {ex}");
                 throw;
             }

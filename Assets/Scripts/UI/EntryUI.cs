@@ -192,23 +192,13 @@ namespace UI
                         Message = "회원가입에 성공하였습니다."
                     });
                 },
-                failedCallback: errorCode =>
+                failedCallback: () =>
                 {
                     createAccountButton.interactable = true;
-                    if (errorCode == AuthErrorType.EmailAlreadyInUse)
+                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
                     {
-                        GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                        {
-                            Message = "이미 존재하는 계정입니다."
-                        });
-                    }
-                    else
-                    {
-                        GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                        {
-                            Message = "회원가입에 실패하였습니다."
-                        });
-                    }
+                        Message = "회원가입에 실패하였습니다."
+                    });
                 }
             ).Forget();
         }
@@ -249,7 +239,7 @@ namespace UI
                         Message = "로그인에 성공하였습니다."
                     });
                 },
-                failedCallback: _ =>
+                failedCallback: () =>
                 {
                     loginButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
@@ -283,7 +273,7 @@ namespace UI
                         Message = "로그인에 성공하였습니다."
                     });
                 },
-                failedCallback: _ =>
+                failedCallback: () =>
                 {
                     approveButton.interactable = true;
                     GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()

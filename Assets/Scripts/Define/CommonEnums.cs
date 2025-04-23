@@ -14,9 +14,4 @@
         Entry,
         ToastMessage,
     }
-
-    public enum AuthErrorType
-    {
-        EmailAlreadyInUse = 8,
-    }
 }
