@@ -310,6 +310,22 @@ namespace UI
                 });
                 return;
             }
+
+            nickNameButton.interactable = false;
+            GameManager.Instance.Firebase.CreateUserInfo
+            (
+                nickname, 
+                successCallback: () =>
+                {
+                    nickNameButton.interactable = true;
+                    OnSuccessCreateUserInfo();
+                },
+                failedCallback: () =>
+                {
+                    nickNameButton.interactable = true;
+                    OnFailedCreateUserInfo();
+                }
+            );
         }
 
         private void OnSuccessLogin()
@@ -328,6 +344,22 @@ namespace UI
             GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
             {
                 Message = "로그인에 실패하였습니다."
+            });
+        }
+
+        private void OnSuccessCreateUserInfo()
+        {
+            GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+            {
+                Message = "유저 정보 생성에 성공하였습니다."
+            });
+        }
+
+        private void OnFailedCreateUserInfo()
+        {
+            GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+            {
+                Message = "유저 정보 생성에 실패하였습니다."
             });
         }
     }
