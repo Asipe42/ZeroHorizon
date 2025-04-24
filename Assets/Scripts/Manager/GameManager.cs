@@ -10,7 +10,7 @@ namespace Manager
     {
         public UIManager UI { get; private set; }
         public AssetManager Assets { get; private set; }
-        public AuthManager Auth { get; private set; }
+        public FirebaseManager Firebase { get; private set; }
         
         public bool IsInit { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Manager
             
             await InitAssetManager();
             await InitUIManager();
-            await InitAuthManager();
+            await InitFirebaseManager();
 
             IsInit = true;
         }
@@ -58,13 +58,13 @@ namespace Manager
             OnInitUIManager?.Invoke();
         }
 
-        private async UniTask InitAuthManager()
+        private async UniTask InitFirebaseManager()
         {
-            Auth = new AuthManager();
-            await Auth.Init();
+            Firebase = new FirebaseManager();
+            await Firebase.Init();
 
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
-            Debug.Log($"Complete Initialize {nameof(AuthManager)}");
+            Debug.Log($"Complete Initialize {nameof(FirebaseManager)}");
             
             OnInitAuthManager?.Invoke();
         }

@@ -180,7 +180,7 @@ namespace UI
             }
 
             createAccountButton.interactable = false;
-            GameManager.Instance.Auth.CreateAccountWithEmail
+            GameManager.Instance.Firebase.CreateAccountWithEmail
             (
                 email: email, 
                 password: password,
@@ -227,7 +227,7 @@ namespace UI
             }
 
             loginButton.interactable = false;
-            GameManager.Instance.Auth.SignInWithEmail
+            GameManager.Instance.Firebase.SignInWithEmail
             (
                 email: email, 
                 password: password,
@@ -252,7 +252,7 @@ namespace UI
 
         private void OnGoogleLogin()
         {
-            GameManager.Instance.Auth.OpenGoogleAuthURL();
+            GameManager.Instance.Firebase.OpenGoogleAuthURL();
             loginPanel.SetActive(false);
             approvePanel.SetActive(true);
         }
@@ -262,7 +262,7 @@ namespace UI
             string code = approveInputField.text;
 
             approveButton.interactable = false;
-            GameManager.Instance.Auth.SignInWithGoogle
+            GameManager.Instance.Firebase.SignInWithGoogle
             (
                 code: code,
                 successCallback: () =>

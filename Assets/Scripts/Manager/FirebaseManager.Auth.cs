@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace Manager
 {
-    public class AuthManager
+    public partial class FirebaseManager
     {
         private FirebaseAuth _auth;
         private FirebaseUser _user;
@@ -21,40 +21,6 @@ namespace Manager
         private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
         private const string Scope = "email profile openid";
         
-        public async UniTask Init()
-        {
-            await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-            {
-                if (task.Result != DependencyStatus.Available)
-                {
-                    Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
-                    return;
-                }
-
-                // google.services.json 파일 대신 수동 초기화
-                AppOptions appOptions = new AppOptions()
-                {
-                    ApiKey = "AIzaSyBNrtipIiWxyUzID_45N03R4JbuRKUO43s",
-                    AppId = "1:382186013137:web:3a8c36546268779fd820f0",
-                    ProjectId = "zerohorizon-1f654",
-                };
-                
-                FirebaseApp app = FirebaseApp.Create(appOptions);
-                _auth = FirebaseAuth.DefaultInstance;
-                
-                Debug.Log("Firebase Auth initialized.");
-            });
-
-            if (LocalDBHandler.TryGetUID(out _uid))
-            {
-                Debug.Log("Login record found.");
-            }
-            else
-            {
-                Debug.Log("No login record found.");
-            }
-        }
-
         public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
