@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Define;
 using Firebase;
@@ -160,10 +161,14 @@ namespace Manager
             Application.OpenURL(authUrl);
         }
         
+
+        // UserInfo를 생성한다.
+        // UserInfo를 확인한다.
+        
         public void CreateUserInfo(string nickname, Action successCallback = null, Action failedCallback = null)
         {
-            DocumentReference userRef = _firestore.Collection("USERS").Document(_uid);
-            userRef.SetAsync
+            DocumentReference uidRef = _firestore.Collection("USERS").Document(_uid);
+            uidRef.SetAsync
             (
                 documentData: new Dictionary<string, object>()
                 {
@@ -183,6 +188,20 @@ namespace Manager
                 Debug.Log("Success creating user info");
                 successCallback?.Invoke();
             } );
+        }
+
+        public async UniTask<bool> IsExistNickname(string nickname)
+        {
+            CollectionReference usersRef = _firestore.Collection("USERS");
+            QuerySnapshot snapshot = await usersRef.WhereEqualTo("NICKNAME", nickname).GetSnapshotAsync();
+            return snapshot.Count > 0;
+        }
+
+        public async UniTask<bool> IsExistUserInfo(string uid)
+        {
+            DocumentReference uidRef = _firestore.Collection("USERS").Document(uid);
+            DocumentSnapshot snapshot = await uidRef.GetSnapshotAsync();
+            return snapshot.Exists;
         }
     }
 }
