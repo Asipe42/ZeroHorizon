@@ -15,6 +15,8 @@ namespace UI
         [FoldoutGroup("방 참가")] [SerializeField] private TMP_InputField joinRoomInputField;
         [FoldoutGroup("방 참가")] [SerializeField] private Button joinRoomButton;
 
+        public LobbyUIModel Model { get; private set; }
+        
         private void Awake()
         {
             Bind();
@@ -29,6 +31,7 @@ namespace UI
         public override void Open()
         {
             base.Open();
+            Model = _model as LobbyUIModel;
             
             RoomManager.Instance.OnJoinedRoomEvent -= OnJoinedRoomEventEvent;
             RoomManager.Instance.OnJoinedRoomEvent += OnJoinedRoomEventEvent;

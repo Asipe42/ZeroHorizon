@@ -10,16 +10,11 @@ namespace UI
 
         public ToastMessageUIModel Model { get; private set; }
 
-        public override void Init()
-        {
-            base.Init();
-            Model = _model as ToastMessageUIModel;
-        }
-
         public override void Open()
         {
             base.Open();
-            
+            Model = _model as ToastMessageUIModel;
+
             ShowMessage();
             ShowAnimation();
         }
