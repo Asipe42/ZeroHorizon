@@ -185,19 +185,16 @@ namespace UI
                 
                 case AuthState.HasUID:
                 {
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "UID가 존재합니다."
-                    });
+                    // UID는 존재함으로 자동 로그인
+                    OnSuccessLogin();
                     break;
                 }
                 
                 case AuthState.HasUserInfo:
                 {
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "유저 정보가 존재합니다."
-                    });
+                    // 예외
+                    CleanUp();
+                    Close();
                     break;
                 }
                 

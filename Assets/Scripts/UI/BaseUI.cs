@@ -9,6 +9,7 @@ namespace UI
         public virtual void Init()
         {
             gameObject.SetActive(false);
+            DontDestroyOnLoad(this);
         }
         
         public virtual void BindModel(BaseUIModel model)

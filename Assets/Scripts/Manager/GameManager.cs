@@ -34,6 +34,26 @@ namespace Manager
             await InitUIManager();
             await InitFirebaseManager();
 
+            switch (Firebase.AuthState)
+            {
+                case AuthState.None:
+                case AuthState.HasUID:
+                {
+                    break;
+                }
+
+                case AuthState.HasUserInfo:
+                {
+                    LoadScene(SceneType.Main);
+                    break;
+                }
+                
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+
             IsInit = true;
         }
         

@@ -13,10 +13,10 @@ namespace Controller
         [SerializeField] private EntryUI entryUI;
         
         public override SceneType Type => SceneType.Entry;
-
-        public override void Init()
+        
+        protected override void OnInit()
         {
-            base.Init();
+            base.OnInit();
             
             /*
              * 초기화

@@ -23,12 +23,12 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _assetKeys
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[Define.ClientEnum+EUIType,
-        Assembly-CSharp],[System.String, mscorlib]], mscorlib
+      Data: 0|System.Collections.Generic.Dictionary`2[[Define.UIType, Assembly-CSharp],[System.String,
+        mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Define.ClientEnum+EUIType,
-        Assembly-CSharp]], mscorlib
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Define.UIType, Assembly-CSharp]],
+        mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
       Data: 
@@ -54,6 +54,18 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 1
+      Data: LobbyUI
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -61,24 +73,14 @@ MonoBehaviour:
       Data: 
     - Name: _sortOrders
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[Define.ClientEnum+EUIType,
-        Assembly-CSharp],[System.Int32, mscorlib]], mscorlib
+      Data: 2|System.Collections.Generic.Dictionary`2[[Define.UIType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
     - Name: comparer
-      Entry: 7
-      Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[Define.ClientEnum+EUIType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
+      Entry: 9
       Data: 1
+    - Name: 
+      Entry: 12
+      Data: 2
     - Name: 
       Entry: 7
       Data: 
@@ -88,6 +90,18 @@ MonoBehaviour:
     - Name: $v
       Entry: 3
       Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
