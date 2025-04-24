@@ -8,6 +8,12 @@ namespace Controller
     {
         public override SceneType Type => SceneType.Main;
 
+        public override void Init()
+        {
+            base.Init();
+            MainCamera.gameObject.SetActive(false);
+        }
+
         protected override void OnInit()
         {
             base.OnInit();

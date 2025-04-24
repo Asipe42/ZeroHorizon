@@ -11,12 +11,14 @@ namespace Manager
     {
         public UIManager UI { get; private set; }
         public AssetManager Assets { get; private set; }
+        public InputManager Input { get; private set; }
         public FirebaseManager Firebase { get; private set; }
         
         public bool IsInit { get; private set; }
 
         public event Action OnInitAssetManager;
         public event Action OnInitUIManager;
+        public event Action OnInitInputManager;
         public event Action<AuthState> OnInitAuthManager;
         
         protected override void Awake()
@@ -26,12 +28,23 @@ namespace Manager
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
+        private void Update()
+        {
+            UpdateInput();
+        }
+
+        private void UpdateInput()
+        {
+            Input.CustomUpdate();
+        }
+
         public async UniTaskVoid Init()
         {
             IsInit = false;
             
             await InitAssetManager();
             await InitUIManager();
+            await InitInputManager();
             await InitFirebaseManager();
 
             switch (Firebase.AuthState)
@@ -77,6 +90,17 @@ namespace Manager
             Debug.Log($"Complete Initialize {nameof(UIManager)}");
             
             OnInitUIManager?.Invoke();
+        }
+
+        private async UniTask InitInputManager()
+        {
+            Input = new InputManager();
+            await Input.Init();
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            Debug.Log($"Complete Initialize {nameof(InputManager)}");
+            
+            OnInitInputManager?.Invoke();
         }
 
         private async UniTask InitFirebaseManager()

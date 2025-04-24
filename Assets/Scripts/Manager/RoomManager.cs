@@ -1,4 +1,5 @@
 ﻿using System;
+using Actor;
 using Photon.Pun;
 using UnityEngine;
 
@@ -72,7 +73,9 @@ namespace Manager
             Debug.Log("OnJoinRoom");
             
             // Test
-            PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+            GameObject goPlayer = PhotonNetwork.Instantiate("Prefabs/Player", Vector3.zero, Quaternion.identity);
+            PlayerCharacter player = goPlayer.GetComponent<PlayerCharacter>();
+            player.Init();
         }
     }
 }

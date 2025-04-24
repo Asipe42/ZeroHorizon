@@ -14,12 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Actor
   m_GUID: 4d002fb46f29f954d8774f851b0a7e9c
-  m_SerializeEntries:
-  - m_GUID: 9c17f2c27cf786343adbfeb59ba902f3
-    m_Address: Player
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bf5af5ca8dbb5214fb8966cb18dbceb9, type: 2}
   m_SchemaSet:
