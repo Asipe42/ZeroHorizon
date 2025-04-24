@@ -56,6 +56,7 @@ namespace UI
         private void OnJoinedRoomEventEvent()
         {
             GameManager.Instance.UI.CloseUI(UIType.Loading);
+            GameManager.Instance.UI.CloseUI(UIType.Lobby);
         }
     }
 }
