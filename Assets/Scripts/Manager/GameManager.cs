@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Define;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility;
@@ -16,7 +17,7 @@ namespace Manager
 
         public event Action OnInitAssetManager;
         public event Action OnInitUIManager;
-        public event Action OnInitAuthManager;
+        public event Action<AuthState> OnInitAuthManager;
         
         protected override void Awake()
         {
@@ -66,7 +67,7 @@ namespace Manager
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             Debug.Log($"Complete Initialize {nameof(FirebaseManager)}");
             
-            OnInitAuthManager?.Invoke();
+            OnInitAuthManager?.Invoke(Firebase.AuthState);
         }
     }
 }

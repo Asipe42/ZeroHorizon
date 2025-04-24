@@ -14,4 +14,11 @@
         Entry,
         ToastMessage,
     }
+
+    public enum AuthState
+    {
+        None,
+        HasUID,
+        HasUserInfo
+    }
 }

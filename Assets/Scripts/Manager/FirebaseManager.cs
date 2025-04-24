@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Define;
 using Firebase;
 using Firebase.Auth;
-using Firebase.Extensions;
 using Firebase.Firestore;
 using Handler;
 using UnityEngine;
@@ -17,13 +15,16 @@ namespace Manager
     public class FirebaseManager
     {
         private FirebaseAuth _auth;
-        private FirebaseUser _user;
         private FirebaseFirestore _firestore;
+        
+        private FirebaseUser _user;
         private string _uid;
         private string _nickname;
+        private AuthState _authState;
         
         public string UID => _uid;
         public string Nickname => _nickname;
+        public AuthState AuthState => _authState;
         
         private const string ClientID = "985978133149-mr8pmvd96c3j6eoi3bkbh47bd4a31of9.apps.googleusercontent.com";
         private const string ClientSecret = "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";
@@ -55,23 +56,29 @@ namespace Manager
                 Debug.Log("Firebase Auth initialized.");
             });
 
-            if (LocalDBHandler.TryGetUID(out _uid))
-            {
-                Debug.Log("Login record found.");
-            }
-            else
-            {
-                Debug.Log("No login record found.");
-            }
+            await HandleAuthFlow();
         }
         
-        public async UniTask SignInWithEmail(string email, string password, Action successCallback = null, Action failedCallback = null)
+        public void OpenGoogleAuthURL()
+        {
+            string authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + string.Join
+            (
+                "&", 
+                $"client_id={ClientID}", 
+                $"redirect_uri={Uri.EscapeDataString(RedirectUri)}", 
+                "response_type=code", 
+                $"scope={Uri.EscapeDataString(Scope)}", 
+                "access_type=offline"
+            );
+            Application.OpenURL(authUrl);
+        }
+        
+        public async UniTask SignInWithEmailAndPassword(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
-                AuthResult authResult = await _auth.SignInWithEmailAndPasswordAsync(email, password);
-                _user = authResult.User;
-                LocalDBHandler.WriteUID(_user.UserId);
+                AuthResult result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+                SetFirebaseUser(result.User);
                 
                 successCallback?.Invoke();
                 Debug.Log($"User signed in: {_user.UserId}");
@@ -109,8 +116,8 @@ namespace Manager
                 
                 try
                 {
-                    _user = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
-                    LocalDBHandler.WriteUID(_user.UserId);
+                    FirebaseUser user = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
+                    SetFirebaseUser(user);
                     
                     successCallback?.Invoke();
                     Debug.Log($"User signed in: {_user.UserId}");
@@ -128,80 +135,120 @@ namespace Manager
             }
         }
         
-        public async UniTask CreateAccountWithEmail(string email, string password, Action successCallback = null, Action failedCallback = null)
+        public async UniTask CreateUserAccount(string email, string password, Action successCallback = null, Action failedCallback = null)
         {
             try
             {
-                AuthResult authResult = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
-                _user = authResult.User;
-                LocalDBHandler.WriteUID(_user.UserId);
+                await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
                 
                 successCallback?.Invoke();
-                Debug.Log($"User created and signed in: {_user.Email}");
+                Debug.Log($"User created and signed in: {email}");
             }
             catch (FirebaseException ex)
             {
                 failedCallback?.Invoke();
                 Debug.LogError($"User create failed: {ex}");
-                throw;
             }
         }
         
-        public void OpenGoogleAuthURL()
+        public async UniTaskVoid CreateUserInfo(string uid, string nickname, Action successCallback = null, Action failedCallback = null)
         {
-            string authUrl = "https://accounts.google.com/o/oauth2/v2/auth?" + string.Join
-            (
-                "&", 
-                $"client_id={ClientID}", 
-                $"redirect_uri={Uri.EscapeDataString(RedirectUri)}", 
-                "response_type=code", 
-                $"scope={Uri.EscapeDataString(Scope)}", 
-                "access_type=offline"
-            );
-            Application.OpenURL(authUrl);
-        }
-        
-
-        // UserInfo를 생성한다.
-        // UserInfo를 확인한다.
-        
-        public void CreateUserInfo(string nickname, Action successCallback = null, Action failedCallback = null)
-        {
-            DocumentReference uidRef = _firestore.Collection("USERS").Document(_uid);
-            uidRef.SetAsync
-            (
-                documentData: new Dictionary<string, object>()
+            if (await IsExistsUserInfo(uid) || await IsExistsNickname(nickname))
+            {
+                failedCallback?.Invoke();
+                return;
+            }
+            
+            try
+            {
+                Dictionary<string, object> userData = new Dictionary<string, object>
                 {
                     { "NICKNAME", nickname },
                     { "CREATED_AT", FieldValue.ServerTimestamp }
-                }
-            ).ContinueWithOnMainThread(task =>
-            {
-                if (task.IsCompleted == false)
-                {
-                    failedCallback?.Invoke();
-                    return;
-                }
+                };
 
-                _nickname = nickname;
-                
-                Debug.Log("Success creating user info");
+                DocumentReference uidRef = _firestore.Collection("USERS").Document(uid);
+                await uidRef.SetAsync(userData);
+                SetNickname(nickname);
+
                 successCallback?.Invoke();
-            } );
+                Debug.Log("Success creating user info");
+            }
+            catch (Exception e)
+            {
+                failedCallback?.Invoke();
+                Debug.LogError($"CreateUserInfo failed: {e.Message}");
+            }
         }
 
-        public async UniTask<bool> IsExistNickname(string nickname)
+        private async UniTask<bool> IsExistsNickname(string nickname)
         {
             CollectionReference usersRef = _firestore.Collection("USERS");
             QuerySnapshot snapshot = await usersRef.WhereEqualTo("NICKNAME", nickname).GetSnapshotAsync();
             return snapshot.Count > 0;
         }
 
-        public async UniTask<bool> IsExistUserInfo(string uid)
+        private async UniTask<bool> IsExistsUserInfo(string uid)
         {
             DocumentReference uidRef = _firestore.Collection("USERS").Document(uid);
             DocumentSnapshot snapshot = await uidRef.GetSnapshotAsync();
             return snapshot.Exists;
+        }
+
+        private void SetFirebaseUser(FirebaseUser user)
+        {
+            _user = user;
+            _uid = _user.UserId;
+            LocalDBHandler.WriteUID(_uid);
+        }
+        
+        private void SetNickname(string nickname)
+        {
+            _nickname = nickname;
+            LocalDBHandler.WriteNickname(_nickname);
+        }
+        
+        private async UniTask HandleAuthFlow()
+        {
+            /*
+             * 시나리오
+             *  A. UID가 존재하지 않는 경우
+             *      - 아무것도 하지 않는다.
+             *  B. UID는 존재하고 유저 정보가 존재하지 않는 경우
+             *      - 유저 정보 생성 단계로 넘어간다.
+             *  C. UID, 유저 정보 모두 존재하는 경우
+             *      - 씬 전환 단계로 넘어간다.
+             */
+            
+            // Case A
+            if (LocalDBHandler.TryGetUID(out _uid) == false)
+            {
+                Debug.Log("No login record found.");
+                return;
+            }
+            
+            Debug.Log("Login record found.");
+            
+            // Case B
+            if (await IsExistsUserInfo(_uid) == false)
+            {
+                HandleUserInfoFlow();
+                return;
+            }
+            
+            // Case C
+            HandleMainSceneFlow();
+        }
+
+        private void HandleUserInfoFlow()
+        {
+            _authState = AuthState.HasUID;
+        }
+
+        private void HandleMainSceneFlow()
+        {
+            _authState = AuthState.HasUserInfo;
+            LocalDBHandler.TryGetNickname(out _nickname);
         }
     }
 }

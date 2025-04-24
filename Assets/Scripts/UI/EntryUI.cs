@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 using Define;
 using Manager;
@@ -168,13 +169,43 @@ namespace UI
             ShowDescription("Initializing UI Manager");
         }
         
-        private void OnInitAuthManager()
+        private void OnInitAuthManager(AuthState state)
         {
             ShowProgress(1.0f);
             ShowDescription("Initializing Auth Manager");
-            
-            loadingPanel.SetActive(false);
-            loginPanel.SetActive(true);
+
+            switch (state)
+            {
+                case AuthState.None:
+                {
+                    loadingPanel.SetActive(false);
+                    loginPanel.SetActive(true);
+                    break;
+                }
+                
+                case AuthState.HasUID:
+                {
+                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "UID가 존재합니다."
+                    });
+                    break;
+                }
+                
+                case AuthState.HasUserInfo:
+                {
+                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+                    {
+                        Message = "유저 정보가 존재합니다."
+                    });
+                    break;
+                }
+                
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
         }
 
         private void CreateAccount()
@@ -201,7 +232,7 @@ namespace UI
             }
 
             createAccountButton.interactable = false;
-            GameManager.Instance.Firebase.CreateAccountWithEmail
+            GameManager.Instance.Firebase.CreateUserAccount
             (
                 email: email, 
                 password: password,
@@ -248,7 +279,7 @@ namespace UI
             }
 
             loginButton.interactable = false;
-            GameManager.Instance.Firebase.SignInWithEmail
+            GameManager.Instance.Firebase.SignInWithEmailAndPassword
             (
                 email: email, 
                 password: password,
@@ -314,6 +345,7 @@ namespace UI
             nickNameButton.interactable = false;
             GameManager.Instance.Firebase.CreateUserInfo
             (
+                GameManager.Instance.Firebase.UID,
                 nickname, 
                 successCallback: () =>
                 {
@@ -325,7 +357,7 @@ namespace UI
                     nickNameButton.interactable = true;
                     OnFailedCreateUserInfo();
                 }
-            );
+            ).Forget();
         }
 
         private void OnSuccessLogin()
