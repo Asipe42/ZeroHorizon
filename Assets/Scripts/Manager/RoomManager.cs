@@ -32,12 +32,12 @@ namespace Manager
 
         public void JoinRoom(string roomName)
         {
-            PhotonNetwork.CreateRoom(roomName);
+            PhotonNetwork.JoinRoom(roomName);
         }
 
         public void CreateRoom(string roomName)
         {
-            PhotonNetwork.JoinRoom(roomName);
+            PhotonNetwork.CreateRoom(roomName);
         }
 
         public override void OnConnectedToMaster()
@@ -54,6 +54,8 @@ namespace Manager
             
             OnConnectedLobby?.Invoke();
             Debug.Log("OnJoinedLobby");
+            
+            PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
         }
 
         public override void OnCreatedRoom()

@@ -251,6 +251,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e02c922ab15a4a27a996a06d59a1b0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createRoomInputField: {fileID: 1937544355795914112}
+  createRoomButton: {fileID: 3081087084879037352}
+  joinRoomInputField: {fileID: 648052305622089711}
+  joinRoomButton: {fileID: 5865516617307580210}
 --- !u!1 &1543990414175222804
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +799,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBC29 \uC811\uC18D"
+  m_text: "\uBC29 \uCC38\uAC00"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2e2f5c6f3a74cb540be5817c65c39976, type: 2}
   m_sharedMaterial: {fileID: 383993795591079198, guid: 2e2f5c6f3a74cb540be5817c65c39976, type: 2}
@@ -925,7 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1496,7 +1500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -120}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5145032455215537493
@@ -1604,7 +1608,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBC29 \uB9CC\uB4E4\uAE30"
+  m_text: "\uBC29 \uC0DD\uC131"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2e2f5c6f3a74cb540be5817c65c39976, type: 2}
   m_sharedMaterial: {fileID: 383993795591079198, guid: 2e2f5c6f3a74cb540be5817c65c39976, type: 2}
