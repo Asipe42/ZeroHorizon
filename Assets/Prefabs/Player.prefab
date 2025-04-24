@@ -186,6 +186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f12dd6d50d56472db62ee4030738660e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonView: {fileID: 1956160977462501217}
+  photonRigidbodyView: {fileID: 534786720849936171}
+  rigid: {fileID: 4624295877883217020}
 --- !u!114 &1956160977462501217
 MonoBehaviour:
   m_ObjectHideFlags: 0

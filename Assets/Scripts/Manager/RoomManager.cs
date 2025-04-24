@@ -70,6 +70,9 @@ namespace Manager
             
             OnJoinedRoomEvent?.Invoke();
             Debug.Log("OnJoinRoom");
+            
+            // Test
+            PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
         }
     }
 }
