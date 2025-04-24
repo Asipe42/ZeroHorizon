@@ -9,8 +9,8 @@ namespace Manager
         public static RoomManager Instance { get; private set; }
         
         public event Action OnConnectedLobby;
-        public event Action OnCreateRoom;
-        public event Action OnJoinRoom;
+        public event Action OnCreatedRoomEvent;
+        public event Action OnJoinedRoomEvent;
 
         private void Awake()
         {
@@ -54,15 +54,13 @@ namespace Manager
             
             OnConnectedLobby?.Invoke();
             Debug.Log("OnJoinedLobby");
-            
-            PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
         }
 
         public override void OnCreatedRoom()
         {
             base.OnCreatedRoom();
             
-            OnCreateRoom?.Invoke();
+            OnCreatedRoomEvent?.Invoke();
             Debug.Log("OnCreatedRoom");
         }
 
@@ -70,7 +68,7 @@ namespace Manager
         {
             base.OnJoinedRoom();
             
-            OnJoinRoom?.Invoke();
+            OnJoinedRoomEvent?.Invoke();
             Debug.Log("OnJoinRoom");
         }
     }

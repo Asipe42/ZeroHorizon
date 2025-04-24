@@ -13,7 +13,8 @@
         None,
         Entry,
         ToastMessage,
-        Lobby
+        Lobby,
+        Loading
     }
 
     public enum AuthState

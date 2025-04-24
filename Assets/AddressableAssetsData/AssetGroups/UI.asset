@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: 291f51f97daf848498af07d3be39b249
   m_SerializeEntries:
+  - m_GUID: 0d5c7e63b15241f43a700fa441b32239
+    m_Address: LoadingUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e66f8a0a4dafed488af0fd4dbaa7431
     m_Address: LobbyUI
     m_ReadOnly: 0

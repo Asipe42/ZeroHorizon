@@ -5,7 +5,7 @@ namespace UI
     public class BaseUI : MonoBehaviour
     {
         protected BaseUIModel _model;
-
+        
         public virtual void Init()
         {
             gameObject.SetActive(false);

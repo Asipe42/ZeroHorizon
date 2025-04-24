@@ -48,7 +48,6 @@ namespace Manager
 
             _model.Init();
             ui.BindModel(_model);
-            ui.Init();
             ui.Open();
 
             Debug.Log($"Open UI: {type}");

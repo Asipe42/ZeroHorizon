@@ -1,4 +1,5 @@
-﻿using Manager;
+﻿using Define;
+using Manager;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -24,17 +25,34 @@ namespace UI
             createRoomButton.onClick.AddListener(OnCreateRoom);
             joinRoomButton.onClick.AddListener(OnJoinRoom);
         }
+        
+        public override void Open()
+        {
+            base.Open();
+            
+            RoomManager.Instance.OnJoinedRoomEvent -= OnJoinedRoomEventEvent;
+            RoomManager.Instance.OnJoinedRoomEvent += OnJoinedRoomEventEvent;
+        }
 
         private void OnCreateRoom()
         {
+            GameManager.Instance.UI.OpenUI(UIType.Loading, new LoadingUIModel());
+            
             string roomName = createRoomInputField.text;
             RoomManager.Instance.CreateRoom(roomName);
         }
 
         private void OnJoinRoom()
         {
+            GameManager.Instance.UI.OpenUI(UIType.Loading, new LoadingUIModel());
+            
             string roomName = joinRoomInputField.text;
             RoomManager.Instance.JoinRoom(roomName);
+        }
+
+        private void OnJoinedRoomEventEvent()
+        {
+            GameManager.Instance.UI.CloseUI(UIType.Loading);
         }
     }
 }
