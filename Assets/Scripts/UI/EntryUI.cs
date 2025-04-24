@@ -15,7 +15,6 @@ namespace UI
         [FoldoutGroup("로딩")] [SerializeField] private GameObject loadingPanel;
         [FoldoutGroup("로딩")] [SerializeField] private Slider progressBar;
         [FoldoutGroup("로딩")] [SerializeField] private TextMeshProUGUI progressText;
-        [FoldoutGroup("로딩")] [SerializeField] private TextMeshProUGUI descriptionText;
 
         [FoldoutGroup("로그인")] [SerializeField] private GameObject loginPanel;
         [FoldoutGroup("로그인")] [SerializeField] private TMP_InputField emailInputField;
@@ -64,7 +63,6 @@ namespace UI
             
             InitPanel();
             InitProgress();
-            InitDescription();
         }
         
         private void BindEvent()
@@ -94,21 +92,11 @@ namespace UI
             progressBar.value = 0;
             progressText.text = string.Empty;
         }
-        
-        private void InitDescription()
-        {
-            descriptionText.text = string.Empty;
-        }
 
         private void ShowProgress(float progress)
         {
             progressBar.value = progress;
             progressText.text = $"{progress * 100:F0}%";
-        }
-        
-        private void ShowDescription(string text)
-        {
-            descriptionText.text = text;
         }
 
         private bool IsValidEmail(string email)
@@ -160,19 +148,16 @@ namespace UI
         private void OnInitAssetManager()
         {
             ShowProgress(0.3f);
-            ShowDescription("Initializing Asset Manager");
         }
 
         private void OnInitUIManager()
         {
             ShowProgress(0.6f);
-            ShowDescription("Initializing UI Manager");
         }
         
         private void OnInitAuthManager(AuthState state)
         {
             ShowProgress(1.0f);
-            ShowDescription("Initializing Auth Manager");
 
             switch (state)
             {
@@ -382,6 +367,10 @@ namespace UI
             {
                 Message = "유저 정보 생성에 성공하였습니다."
             });
+            
+            GameManager.Instance.LoadScene(SceneType.Main);
+            CleanUp();
+            Close();
         }
 
         private void OnFailedCreateUserInfo()
