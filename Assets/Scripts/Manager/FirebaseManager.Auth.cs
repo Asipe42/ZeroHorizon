@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Define;
 using Firebase;
 using Firebase.Auth;
+using Firebase.Firestore;
 using Handler;
 using UnityEngine;
 using UnityEngine.Networking;

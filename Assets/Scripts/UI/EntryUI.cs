@@ -28,6 +28,10 @@ namespace UI
         [FoldoutGroup("인증")] [SerializeField] private Button approveButton;
         [FoldoutGroup("인증")] [SerializeField] private Button closeApproveButton;
         
+        [FoldoutGroup("닉네임")] [SerializeField] private GameObject nickNamePanel;
+        [FoldoutGroup("닉네임")] [SerializeField] private TMP_InputField nickNameInputField;
+        [FoldoutGroup("닉네임")] [SerializeField] private Button nickNameButton;
+        
         public EntryUIModel Model { get; private set; }
 
         private void Awake()
@@ -42,6 +46,7 @@ namespace UI
             googleLoginButton.onClick.AddListener(OnGoogleLogin);
             approveButton.onClick.AddListener(OnApprove);
             closeApproveButton.onClick.AddListener(OnCloseApprove);
+            nickNameButton.onClick.AddListener(OnNickname);
         }
         
         public override void Init()
@@ -78,6 +83,7 @@ namespace UI
             loadingPanel.SetActive(true);
             loginPanel.SetActive(false);
             approvePanel.SetActive(false);
+            nickNamePanel.SetActive(false);
         }
         
         private void InitProgress()
@@ -107,7 +113,9 @@ namespace UI
         private bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
+            {
                 return false;
+            }
 
             /*
              * 정규식
@@ -124,7 +132,9 @@ namespace UI
         private bool IsValidPassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
+            {
                 return false;
+            }
             
             /*
              * 정규식
@@ -133,6 +143,17 @@ namespace UI
              */
             string pattern = @"^[a-zA-Z0-9]{6,}$";
             return Regex.IsMatch(password, pattern);
+        }
+
+        private bool IsValidNickname(string nickname)
+        {
+            if (string.IsNullOrWhiteSpace(nickname))
+            {
+                return false;
+            }
+
+            string pattern = "^[가-힣a-zA-Z]{1,10}$";
+            return Regex.IsMatch(nickname, pattern);
         }
         
         private void OnInitAssetManager()
@@ -234,18 +255,12 @@ namespace UI
                 successCallback: () =>
                 {
                     loginButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "로그인에 성공하였습니다."
-                    });
+                    OnSuccessLogin();
                 },
                 failedCallback: () =>
                 {
                     loginButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "로그인에 실패하였습니다."
-                    });
+                    OnFailedLogin();
                 }
             ).Forget();
         }
@@ -268,18 +283,12 @@ namespace UI
                 successCallback: () =>
                 {
                     approveButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "로그인에 성공하였습니다."
-                    });
+                    OnSuccessLogin();
                 },
                 failedCallback: () =>
                 {
                     approveButton.interactable = true;
-                    GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
-                    {
-                        Message = "로그인에 실패하였습니다."
-                    });
+                    OnFailedLogin();
                 }
             ).Forget();
         }
@@ -288,6 +297,38 @@ namespace UI
         {
             approvePanel.SetActive(false);
             loginPanel.SetActive(true);
+        }
+
+        private void OnNickname()
+        {
+            string nickname = nickNameInputField.text;
+            if (IsValidNickname(nickname) == false)
+            {
+                GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+                {
+                    Message = "올바르지 않은 닉네임 형식입니다."
+                });
+                return;
+            }
+        }
+
+        private void OnSuccessLogin()
+        {
+            GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+            {
+                Message = "로그인에 성공하였습니다."
+            });
+            
+            loginPanel.SetActive(false);
+            nickNamePanel.SetActive(true);
+        }
+
+        private void OnFailedLogin()
+        {
+            GameManager.Instance.UI.OpenUI(UIType.ToastMessage, new ToastMessageUIModel()
+            {
+                Message = "로그인에 실패하였습니다."
+            });
         }
     }
 }
