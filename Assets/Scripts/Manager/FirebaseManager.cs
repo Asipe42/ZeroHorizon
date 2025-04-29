@@ -33,29 +33,24 @@ namespace Manager
         
         public async UniTask Init()
         {
-            await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            DependencyStatus dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+            if (dependencyStatus != DependencyStatus.Available)
             {
-                if (task.Result != DependencyStatus.Available)
-                {
-                    Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
-                    return;
-                }
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                return;
+            }
 
-                // google.services.json 파일 대신 수동 초기화
-                AppOptions appOptions = new AppOptions()
-                {
-                    ApiKey = "AIzaSyBNrtipIiWxyUzID_45N03R4JbuRKUO43s",
-                    AppId = "1:382186013137:web:3a8c36546268779fd820f0",
-                    ProjectId = "zerohorizon-1f654",
-                };
-                
-                FirebaseApp app = FirebaseApp.Create(appOptions);
-                _auth = FirebaseAuth.DefaultInstance;
-                _firestore = FirebaseFirestore.DefaultInstance;
-                
-                Debug.Log("Firebase Auth initialized.");
-            });
+            FirebaseApp app = FirebaseApp.Create(new AppOptions()
+            {
+                ApiKey = "AIzaSyBNrtipIiWxyUzID_45N03R4JbuRKUO43s",
+                AppId = "1:382186013137:web:3a8c36546268779fd820f0",
+                ProjectId = "zerohorizon-1f654",
+            }, "EditorApp");
 
+            _auth = FirebaseAuth.GetAuth(app);
+            _firestore = FirebaseFirestore.GetInstance(app);
+
+            Debug.Log("Firebase initialized.");
             await HandleAuthFlow();
         }
         
