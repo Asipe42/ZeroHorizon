@@ -23,12 +23,16 @@ namespace Actor
 
             GameManager.Instance.Input.OnInputVertical -= OnInputVertical;
             GameManager.Instance.Input.OnInputVertical += OnInputVertical;
+            
+            GameManager.Instance.GamePlay.RegisterActor(this);
         }
 
         public override void CustomUpdate()
         {
             base.CustomUpdate();
             _input.Normalize();
+            
+            Debug.Log($"Input: {_input}");
         }
 
         private void OnInputHorizontal(float value)

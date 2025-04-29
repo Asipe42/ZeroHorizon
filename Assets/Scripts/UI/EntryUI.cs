@@ -72,6 +72,12 @@ namespace UI
             
             GameManager.Instance.OnInitUIManager -= OnInitUIManager;
             GameManager.Instance.OnInitUIManager += OnInitUIManager;
+
+            GameManager.Instance.OnInitInputManager -= OnInitInputManager;
+            GameManager.Instance.OnInitInputManager += OnInitInputManager;
+            
+            GameManager.Instance.OnInitGamePlayManager -= OnInitGamePlayManager;
+            GameManager.Instance.OnInitGamePlayManager += OnInitGamePlayManager;
             
             GameManager.Instance.OnInitAuthManager -= OnInitAuthManager;
             GameManager.Instance.OnInitAuthManager += OnInitAuthManager;
@@ -147,12 +153,22 @@ namespace UI
         
         private void OnInitAssetManager()
         {
-            ShowProgress(0.3f);
+            ShowProgress(0.2f);
         }
 
         private void OnInitUIManager()
         {
+            ShowProgress(0.4f);
+        }
+
+        private void OnInitInputManager()
+        {
             ShowProgress(0.6f);
+        }
+
+        private void OnInitGamePlayManager()
+        {
+            ShowProgress(0.8f);
         }
         
         private void OnInitAuthManager(AuthState state)

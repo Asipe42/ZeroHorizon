@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Actor;
 using Cysharp.Threading.Tasks;
 using Define;
 using UnityEngine;
@@ -12,6 +14,7 @@ namespace Manager
         public UIManager UI { get; private set; }
         public AssetManager Assets { get; private set; }
         public InputManager Input { get; private set; }
+        public GamePlayManager GamePlay { get; private set; }
         public FirebaseManager Firebase { get; private set; }
         
         public bool IsInit { get; private set; }
@@ -19,6 +22,7 @@ namespace Manager
         public event Action OnInitAssetManager;
         public event Action OnInitUIManager;
         public event Action OnInitInputManager;
+        public event Action OnInitGamePlayManager;
         public event Action<AuthState> OnInitAuthManager;
         
         protected override void Awake()
@@ -31,20 +35,50 @@ namespace Manager
         private void Update()
         {
             UpdateInput();
+            UpdateGamePlay();
+        }
+
+        private void FixedUpdate()
+        {
+            FixedUpdateGamePlay();
         }
 
         private void UpdateInput()
         {
+            if (IsInit == false)
+            {
+                return;
+            }
+            
             Input.CustomUpdate();
+        }
+
+        private void UpdateGamePlay()
+        {
+            if (IsInit == false)
+            {
+                return;
+            }
+            
+            GamePlay.CustomUpdate();
+        }
+
+        private void FixedUpdateGamePlay()
+        {
+            if (IsInit == false)
+            {
+                return;
+            }
+            
+            GamePlay.CustomFixedUpdate();
         }
 
         public async UniTaskVoid Init()
         {
-            IsInit = false;
-            
             await InitAssetManager();
             await InitUIManager();
             await InitInputManager();
+            await InitGamePlayManager();
             await InitFirebaseManager();
 
             switch (Firebase.AuthState)
@@ -102,6 +136,17 @@ namespace Manager
             
             OnInitInputManager?.Invoke();
         }
+        
+        private async UniTask InitGamePlayManager()
+        {
+            GamePlay = new GamePlayManager();
+            await GamePlay.Init();
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            Debug.Log($"Complete Initialize {nameof(GamePlayManager)}");
+
+            OnInitGamePlayManager?.Invoke();
+        }
 
         private async UniTask InitFirebaseManager()
         {
@@ -113,5 +158,7 @@ namespace Manager
             
             OnInitAuthManager?.Invoke(Firebase.AuthState);
         }
+
+
     }
 }
