@@ -223,7 +223,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &5453387694794898741
 MonoBehaviour:
@@ -239,6 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   photonView: {fileID: 1956160977462501217}
   photonRigidbodyView: {fileID: 534786720849936171}
+  speed: 3
+  maxVelocityChange: 5
   rigid: {fileID: 4624295877883217020}
 --- !u!114 &1956160977462501217
 MonoBehaviour:
@@ -277,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
+  m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &4900669063938397704
 GameObject:
