@@ -14,9 +14,12 @@ namespace Actor
         [SerializeField] private float maxVelocityChange;
 
         [SerializeField] private Rigidbody rigid;
+        [SerializeField] private Animator animator;
 
         private Vector2 _input;
         
+        private static readonly int Velocity = Animator.StringToHash("Velocity");
+
         public override void Init()
         {
             base.Init();
@@ -33,13 +36,30 @@ namespace Actor
         public override void CustomUpdate()
         {
             base.CustomUpdate();
+
+            UpdateInput();
+            UpdateAnimation();
+        }
+
+        private void UpdateInput()
+        {
             _input.Normalize();
-            
+        }
+
+        private void UpdateAnimation()
+        {
+            animator.SetFloat(Velocity, rigid.linearVelocity.normalized.magnitude);
         }
 
         public override void CustomFixedUpdate()
         {
             base.CustomFixedUpdate();
+
+            FixedUpdateRigidbody();
+        }
+
+        private void FixedUpdateRigidbody()
+        {
             rigid.AddForce(CalcMovement(), ForceMode.VelocityChange);
         }
 

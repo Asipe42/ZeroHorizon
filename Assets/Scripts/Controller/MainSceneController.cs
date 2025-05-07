@@ -11,7 +11,6 @@ namespace Controller
         public override void Init()
         {
             base.Init();
-            MainCamera.gameObject.SetActive(false);
         }
 
         protected override void OnInit()
