@@ -1,4 +1,6 @@
-﻿using Manager;
+﻿using Controller;
+using Define;
+using Manager;
 using Photon.Pun;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -39,6 +41,7 @@ namespace Actor
 
             UpdateInput();
             UpdateAnimation();
+            UpdateRotation();
         }
 
         private void UpdateInput()
@@ -49,6 +52,23 @@ namespace Actor
         private void UpdateAnimation()
         {
             animator.SetFloat(Velocity, rigid.linearVelocity.normalized.magnitude);
+        }
+
+        private void UpdateRotation()
+        {
+            Ray ray = GameManager.Instance.CurrentSceneController.MainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, Layer.Ground))
+            {
+                Vector3 targetPos = hit.point;
+                Vector3 direction = (targetPos - transform.position).normalized;
+                direction.y = 0f;
+
+                if (direction != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                }
+            }
         }
 
         public override void CustomFixedUpdate()
